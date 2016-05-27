@@ -76,6 +76,7 @@ describe 'DNS' do
 
     describe 'DNSレコード一覧' do
       before do
+        sleep(1)
         click_on domain_name
       end
       example '表示' do
