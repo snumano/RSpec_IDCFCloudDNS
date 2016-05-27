@@ -4,7 +4,6 @@ require 'spec_helper'
 # export ABC='abc'
 # RSPEC_ID
 # RSPEC_PW
-# RSPEC_EXIST_ID
 
 domain_word = FFaker::Internet.domain_word
 domain_name = domain_word + '.com'
