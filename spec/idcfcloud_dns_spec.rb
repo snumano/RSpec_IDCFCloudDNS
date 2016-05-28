@@ -7,16 +7,33 @@ require 'spec_helper'
 
 domain_word = FFaker::Internet.domain_word
 domain_name = domain_word + '.com'
-record_name= 'www'
-ip_address = '10.10.10.1'
+record_a_label= 'a'
+record_a_name = record_a_label + '.' + domain_name
+if record_a_name.length > 20
+  record_a_name_short = record_a_name[0,20] + '...'
+else
+  record_a_name_short = record_a_name
+end
+ip_address = FFaker::Internet.ip_v4_address
 unsupported_domain = '.xxx'
 multibyte_domain = '日本語.com'
-over63char_label_domain = 'a'*64 + '.com'
-over255char_domain = 'a'*63 + 'b'*63 + 'c'*63 + 'd'*63 + '.com'
+current_time = Time.now.strftime("%Y%m%d%H%M%S")
+
+domain_name_63char_label = current_time + 'a'*49 + '.com'
+domain_name_63char_label_short = domain_name_63char_label[0,20] + '...'
+domain_name_over63char_label = current_time + 'a'*50 + '.com'
+domain_name_255char  = current_time + 'b'*49 + '.' + 'c'*63 + '.' + 'd'*63 + '.' + 'e'*59 + '.com'
+domain_name_255char_short = domain_name_255char[0,20] + '...'
+domain_name_over255char  = current_time + 'b'*49 + '.' + 'c'*63 + '.' + 'd'*63 + '.' + 'e'*60 + '.com'
 
 p domain_name
-p record_name
 p ip_address
+p current_time
+p domain_name_63char_label
+p domain_name_63char_label_short
+p domain_name_255char
+p domain_name_255char_short
+p domain_name_over255char
 
 describe 'DNS' do
   before(:all) do
@@ -62,8 +79,26 @@ describe 'DNS' do
           sleep(1)
           expect(page).to have_content 'ゾーンの登録を完了しました。'
         end
-        example 'ラベル63文字' # ゾーン削除も実施
-        example 'ゾーン名255文字' # ゾーン削除も実施
+        example 'ラベル63文字' do
+          fill_in('name', :with => domain_name_63char_label)
+          sleep(1)
+          click_on '作成する'
+          sleep(1)
+          expect(page).to have_content 'こちらの情報で登録しますか？'
+          click_on 'はい'
+          sleep(1)
+          expect(page).to have_content 'ゾーンの登録を完了しました。'
+        end
+        example 'ゾーン名255文字' do
+          fill_in('name', :with => domain_name_255char)
+          sleep(1)
+          click_on '作成する'
+          sleep(1)
+          expect(page).to have_content 'こちらの情報で登録しますか？'
+          click_on 'はい'
+          sleep(1)
+          expect(page).to have_content 'ゾーンの登録を完了しました。'
+        end
       end
       context '失敗' do 
         example 'ゾーン名 空白' do
@@ -89,16 +124,16 @@ describe 'DNS' do
           expect(page).to have_content 'ドメイン名が不正です。'
         end
         example 'ラベル63文字超過' do
-          fill_in('name', :with => over63char_label_domain)
+          fill_in('name', :with => domain_name_over63char_label)
           sleep(1)
           click_on '作成する'
           expect(page).to have_content 'ドメイン名が不正です。'
         end
         example 'ゾーン名255文字超過' do
-          fill_in('name', :with => over255char_domain)
+          fill_in('name', :with => domain_name_over255char)
           sleep(1)
           click_on '作成する'
-          expect(page).to have_content 'ドメイン名が不正です。'
+          expect(page).to have_content '255文字以内で設定してください。'
         end
       end
     end
@@ -116,7 +151,7 @@ describe 'DNS' do
           example 'Aレコード' do
             click_on 'レコード登録'
             sleep(1)
-            fill_in('name', :with => record_name)
+            fill_in('name', :with => record_a_label)
             select 'A', from: 'form-input-type'
             fill_in('content', :with => ip_address)
             click_on '登録する'
@@ -124,7 +159,7 @@ describe 'DNS' do
             expect(page).to have_content 'レコードを登録しますか？'
             click_on 'はい'
             sleep(1)
-            expect(page).to have_content record_name + '.' + domain_name
+            expect(page).to have_content record_a_name_short
             expect(page).to have_content ip_address
           end
           example 'CNAMEレコード'
@@ -196,10 +231,38 @@ describe 'DNS' do
           example 'SRVレコード'
         end
       end
+    end
+    describe 'ゾーン削除' do
       describe 'DNSゾーン削除' do
-        example '削除完了' do
-#          save_and_open_page
+        example 'ゾーン名 ***.com' do
+          click_on domain_name
           expect(page).to have_content domain_name
+          # 「DNSゾーン詳細」をクリック。click_onでは動作せず。
+          find(:xpath,'//*[@id="zone-detail"]/div/ol/li[1]/a').click
+          click_on 'ゾーン削除'
+          sleep(1)
+          expect(page).to have_content 'このゾーンを削除しますか？'
+          click_on 'はい'
+          sleep(1)
+          expect(page).to have_content 'ゾーンの削除が完了しました。'
+          click_on 'OK'        
+        end
+        example 'ラベル名63文字' do
+          click_on domain_name_63char_label_short
+          expect(page).to have_content domain_name_63char_label
+          # 「DNSゾーン詳細」をクリック。click_onでは動作せず。
+          find(:xpath,'//*[@id="zone-detail"]/div/ol/li[1]/a').click
+          click_on 'ゾーン削除'
+          sleep(1)
+          expect(page).to have_content 'このゾーンを削除しますか？'
+          click_on 'はい'
+          sleep(1)
+          expect(page).to have_content 'ゾーンの削除が完了しました。'
+          click_on 'OK'        
+        end
+        example 'ゾーン名255文字' do
+          click_on domain_name_255char_short
+          expect(page).to have_content domain_name_255char
           # 「DNSゾーン詳細」をクリック。click_onでは動作せず。
           find(:xpath,'//*[@id="zone-detail"]/div/ol/li[1]/a').click
           click_on 'ゾーン削除'
