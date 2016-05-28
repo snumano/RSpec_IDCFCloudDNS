@@ -7,6 +7,7 @@ require 'spec_helper'
 
 domain_word = FFaker::Internet.domain_word
 domain_name = domain_word + '.com'
+
 record_a_label= 'a'
 record_a_name = record_a_label + '.' + domain_name
 if record_a_name.length > 20
@@ -14,10 +15,54 @@ if record_a_name.length > 20
 else
   record_a_name_short = record_a_name
 end
-ip_address = FFaker::Internet.ip_v4_address
+
+record_cname_label= 'cname'
+record_cname_name = record_cname_label + '.' + domain_name
+if record_cname_name.length > 20
+  record_cname_name_short = record_cname_name[0,20] + '...'
+else
+  record_cname_name_short = record_cname_name
+end
+
+record_aaaa_label= 'aaaa'
+record_aaaa_name = record_aaaa_label + '.' + domain_name
+if record_aaaa_name.length > 20
+  record_aaaa_name_short = record_aaaa_name[0,20] + '...'
+else
+  record_aaaa_name_short = record_aaaa_name
+end
+
+record_mx_label= 'mx'
+record_mx_name = record_mx_label + '.' + domain_name
+if record_mx_name.length > 20
+  record_mx_name_short = record_mx_name[0,20] + '...'
+else
+  record_mx_name_short = record_mx_name
+end
+
+record_txt_label= 'txt'
+record_txt_name = record_txt_label + '.' + domain_name
+if record_txt_name.length > 20
+  record_txt_name_short = record_txt_name[0,20] + '...'
+else
+  record_txt_name_short = record_txt_name
+end
+
+record_srv_label= '_sip._udp'
+record_srv_name = record_srv_label + '.' + domain_name
+if record_srv_name.length > 20
+  record_srv_name_short = record_srv_name[0,20] + '...'
+else
+  record_srv_name_short = record_srv_name
+end
+
+ip_v4_address = FFaker::Internet.ip_v4_address
+ip_v6_address = Faker::Internet.ip_v6_address
 unsupported_domain = '.xxx'
 multibyte_domain = '日本語.com'
 current_time = Time.now.strftime("%Y%m%d%H%M%S")
+content_txt = 'memo' + current_time
+content_srv = '0 5060 sip.example.com'
 
 domain_name_63char_label = current_time + 'a'*49 + '.com'
 domain_name_63char_label_short = domain_name_63char_label[0,20] + '...'
@@ -27,7 +72,8 @@ domain_name_255char_short = domain_name_255char[0,20] + '...'
 domain_name_over255char  = current_time + 'b'*49 + '.' + 'c'*63 + '.' + 'd'*63 + '.' + 'e'*60 + '.com'
 
 p domain_name
-p ip_address
+p ip_v4_address
+p ip_v6_address
 p current_time
 p domain_name_63char_label
 p domain_name_63char_label_short
@@ -79,6 +125,7 @@ describe 'DNS' do
           sleep(1)
           expect(page).to have_content 'ゾーンの登録を完了しました。'
         end
+        example 'ゾーン名 ***.com digコマンド確認'
         example 'ラベル63文字' do
           fill_in('name', :with => domain_name_63char_label)
           sleep(1)
@@ -153,27 +200,94 @@ describe 'DNS' do
             sleep(1)
             fill_in('name', :with => record_a_label)
             select 'A', from: 'form-input-type'
-            fill_in('content', :with => ip_address)
+            fill_in('content', :with => ip_v4_address)
             click_on '登録する'
             sleep(1)
             expect(page).to have_content 'レコードを登録しますか？'
             click_on 'はい'
             sleep(1)
             expect(page).to have_content record_a_name_short
-            expect(page).to have_content ip_address
+            expect(page).to have_content ip_v4_address
           end
-          example 'CNAMEレコード'
-          example 'AAAAレコード'
-          example 'MXレコード'
-          example 'TXTレコード'
-          example 'SRVレコード'
+          example 'CNAMEレコード' do
+            click_on 'レコード登録'
+            sleep(1)
+            fill_in('name', :with => record_cname_label)
+            select 'CNAME', from: 'form-input-type'
+            fill_in('content', :with => record_a_name)
+            click_on '登録する'
+            sleep(1)
+            expect(page).to have_content 'レコードを登録しますか？'
+            click_on 'はい'
+            sleep(1)
+            expect(page).to have_content record_cname_name_short
+          end
+          example 'AAAAレコード' do
+            click_on 'レコード登録'
+            sleep(1)
+            fill_in('name', :with => record_aaaa_label)
+            select 'AAAA', from: 'form-input-type'
+            fill_in('content', :with => ip_v6_address)
+            click_on '登録する'
+            sleep(1)
+            expect(page).to have_content 'レコードを登録しますか？'
+            click_on 'はい'
+            sleep(1)
+            expect(page).to have_content record_aaaa_name_short
+            expect(page).to have_content ip_v6_address
+          end
+          example 'MXレコード' do
+            click_on 'レコード登録'
+            sleep(1)
+            fill_in('name', :with => record_mx_label)
+            select 'MX', from: 'form-input-type'
+            fill_in('content', :with => record_a_name)
+            fill_in('prio', :with => '1')
+            click_on '登録する'
+            sleep(1)
+            expect(page).to have_content 'レコードを登録しますか？'
+            click_on 'はい'
+            sleep(1)
+            expect(page).to have_content record_mx_name_short
+          end
+          example 'TXTレコード' do
+            click_on 'レコード登録'
+            sleep(1)
+            fill_in('name', :with => record_txt_label)
+            select 'TXT', from: 'form-input-type'
+            fill_in('content', :with => content_txt)
+            click_on '登録する'
+            sleep(1)
+            expect(page).to have_content 'レコードを登録しますか？'
+            click_on 'はい'
+            sleep(1)
+            expect(page).to have_content record_txt_name_short
+            expect(page).to have_content content_txt
+          end
+          example 'SRVレコード' do
+            click_on 'レコード登録'
+            sleep(1)
+            fill_in('name', :with => record_srv_label)
+            select 'SRV', from: 'form-input-type'
+            fill_in('content', :with => content_srv)
+            fill_in('prio', :with => '1')
+            click_on '登録する'
+            sleep(1)
+            expect(page).to have_content 'レコードを登録しますか？'
+            click_on 'はい'
+            sleep(1)
+            expect(page).to have_content record_srv_name_short
+            expect(page).to have_content content_srv
+          end
         end
         context '登録失敗' do
           context '必須項目未入力' do
             example 'Aレコード' do
               click_on 'レコード登録'
+              select 'A', from: 'form-input-type'
               click_on '登録する'
               sleep(1)
+              expect(page).to have_content 'A'
               within(:css, '#dns_record_create_form > div:nth-child(14) > div > div') do
                 expect(page).to have_content '必須です。'
               end
@@ -181,32 +295,124 @@ describe 'DNS' do
                 expect(page).to have_content '必須です。'
               end
             end
-            example 'CNAMEレコード'
-            example 'AAAAレコード'
-            example 'MXレコード'
-            example 'TXTレコード'
-            example 'SRVレコード'
+            example 'CNAMEレコード' do
+              click_on 'レコード登録'
+              select 'CNAME', from: 'form-input-type'
+              click_on '登録する'
+              sleep(1)
+              expect(page).to have_content 'CNAME'
+              within(:css, '#dns_record_create_form > div:nth-child(14) > div > div') do
+                expect(page).to have_content '必須です。'
+              end
+              within(:css, '#dns_record_create_form > div:nth-child(16) > div > div') do
+                expect(page).to have_content '必須です。'
+              end
+            end
+            example 'AAAAレコード' do
+              click_on 'レコード登録'
+              select 'AAAA', from: 'form-input-type'
+              click_on '登録する'
+              sleep(1)
+              expect(page).to have_content 'AAAA'
+              within(:css, '#dns_record_create_form > div:nth-child(14) > div > div') do
+                expect(page).to have_content '必須です。'
+              end
+              within(:css, '#dns_record_create_form > div:nth-child(16) > div > div') do
+                expect(page).to have_content '必須です。'
+              end
+            end
+            example 'MXレコード' do
+              click_on 'レコード登録'
+              select 'MX', from: 'form-input-type'
+              click_on '登録する'
+              sleep(1)
+              expect(page).to have_content 'MX'
+              within(:css, '#dns_record_create_form > div:nth-child(14) > div > div') do
+                expect(page).to have_content '必須です。'
+              end
+              within(:css, '#dns_record_create_form > div:nth-child(16) > div > div') do
+                expect(page).to have_content '必須です。'
+              end
+              within(:css, '#dns_record_create_form > div.row.prio > div > div') do
+                expect(page).to have_content '必須です。'
+              end
+            end
+            example 'TXTレコード' do
+              click_on 'レコード登録'
+              select 'TXT', from: 'form-input-type'
+              click_on '登録する'
+              sleep(1)
+              expect(page).to have_content 'TXT'
+              within(:css, '#dns_record_create_form > div:nth-child(14) > div > div') do
+                expect(page).to have_content '必須です。'
+              end
+              within(:css, '#dns_record_create_form > div:nth-child(16) > div > div') do
+                expect(page).to have_content '必須です。'
+              end
+            end
+            example 'SRVレコード' do
+              click_on 'レコード登録'
+              select 'SRV', from: 'form-input-type'
+              click_on '登録する'
+              sleep(1)
+              expect(page).to have_content 'SRV'
+              within(:css, '#dns_record_create_form > div:nth-child(14) > div > div') do
+                expect(page).to have_content '必須です。'
+              end
+              within(:css, '#dns_record_create_form > div:nth-child(16) > div > div') do
+                expect(page).to have_content '必須です。'
+              end
+              within(:css, '#dns_record_create_form > div.row.prio > div > div') do
+                expect(page).to have_content '必須です。'
+              end
+            end
           end
-          context '限界値外' do
-            example 'Aレコード'
-            example 'CNAMEレコード'
-            example 'AAAAレコード'
-            example 'MXレコード'
-            example 'TXTレコード'
-            example 'SRVレコード'
-          end
-          context '不適切値' do
-            example 'Aレコード'
-            example 'CNAMEレコード'
-            example 'AAAAレコード'
-            example 'MXレコード'
-            example 'TXTレコード'
-            example 'SRVレコード'
+          context '異常値' do
+            context '全レコード共通' do
+              example 'ラベル名63文字超過'
+              example 'レコード全体255文字超過'
+              example 'TTL600-86400以外(599)'
+              example 'TTL600-86400以外(86401)'
+            end
+            context 'Aレコード' do
+              example '値がIPv4以外(文字列)'
+            end
+            context 'CNAMEレコード' do 
+              example 'レコード名が重複'
+              example '値がFQDN以外'
+              example '値が255文字超過'
+            end
+            context 'AAAAレコード' do
+              example '値がIPv6以外(文字列)'
+              example '値がIPv6以外(IPv4)'
+            end
+            context 'MXレコード' do
+              example '値がFQDN以外'
+              example '値が255文字超過'
+              example '優先度が文字列'
+              example '優先度が0-65535以外(-1)'
+              example '優先度が0-65535以外(65536)'
+            end
+            context 'TXTレコード' do
+              example 'ダブルクォテーション内の文字列が255文字超過'
+              example '全体の文字列が1024文字超過'
+            end
+            context 'SRVレコード' do
+              example 'weightが0-65535以外(-1)'
+              example 'weightが0-65535以外(65536)'              
+              example 'portが0-65535以外(-1)'
+              example 'portが0-65535以外(65536)'              
+              example 'ホスト名が未入力'
+              example 'ホスト名がFQDN以外'              
+              example '優先度が0-65535以外(-1)'
+              example '優先度が0-65535以外(65536)'              
+            end
           end
         end
       end
-      describe 'レコード詳細' do
+      describe 'レコード詳細、編集' do
         example 'Aレコード'
+        example 'Aレコード digコマンド確認'
         example 'CNAMEレコード'
         example 'AAAAレコード'
         example 'MXレコード'
@@ -216,14 +422,7 @@ describe 'DNS' do
       describe 'レコード削除' do
         context '削除成功' do
           example 'Aレコード'
-          example 'CNAMEレコード'
-          example 'AAAAレコード'
-          example 'MXレコード'
-          example 'TXTレコード'
-          example 'SRVレコード'
-        end
-        context '削除失敗' do
-          example 'Aレコード'
+          example 'Aレコード digコマンド確認'
           example 'CNAMEレコード'
           example 'AAAAレコード'
           example 'MXレコード'
@@ -273,6 +472,7 @@ describe 'DNS' do
           expect(page).to have_content 'ゾーンの削除が完了しました。'
           click_on 'OK'        
         end
+        example 'ゾーン名 ***.com digコマンド確認'
       end
     end
   end

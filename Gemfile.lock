@@ -14,8 +14,11 @@ GEM
       ffi (~> 1.0, >= 1.0.11)
     coderay (1.1.1)
     diff-lcs (1.2.5)
+    faker (1.6.3)
+      i18n (~> 0.5)
     ffaker (2.2.0)
     ffi (1.9.10)
+    i18n (0.7.0)
     launchy (2.4.3)
       addressable (~> 2.3)
     method_source (0.8.2)
@@ -63,6 +66,7 @@ PLATFORMS
 
 DEPENDENCIES
   capybara
+  faker
   ffaker
   launchy
   pry-byebug
