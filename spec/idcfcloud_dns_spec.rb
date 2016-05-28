@@ -9,6 +9,11 @@ domain_word = FFaker::Internet.domain_word
 domain_name = domain_word + '.com'
 record_name= 'www'
 ip_address = '10.10.10.1'
+unsupported_domain = '.xxx'
+multibyte_domain = '日本語.com'
+over63char_label_domain = 'a'*64 + '.com'
+over255char_domain = 'a'*63 + 'b'*63 + 'c'*63 + 'd'*63 + '.com'
+
 p domain_name
 p record_name
 p ip_address
@@ -44,10 +49,10 @@ describe 'DNS' do
     describe 'DNSゾーン作成' do
       before do
         click_on 'DNSゾーン作成'
+        sleep(1)
       end
       context '成功' do
         example 'ゾーン名 ***.com' do
-          sleep(1)
           fill_in('name', :with => domain_name)
           sleep(1)
           click_on '作成する'
@@ -57,6 +62,8 @@ describe 'DNS' do
           sleep(1)
           expect(page).to have_content 'ゾーンの登録を完了しました。'
         end
+        example 'ラベル63文字' # ゾーン削除も実施
+        example 'ゾーン名255文字' # ゾーン削除も実施
       end
       context '失敗' do 
         example 'ゾーン名 空白' do
@@ -64,15 +71,37 @@ describe 'DNS' do
           expect(page).to have_content '必須です。'
         end
         example 'ゾーン名 TLDなし' do
-          sleep(1)
           fill_in('name', :with => domain_word)
+          sleep(1)
+          click_on '作成する'
+          expect(page).to have_content 'ドメイン名が不正です。'
+        end
+        example 'サポート外TLD(.xxx)' do
+          fill_in('name', :with => domain_word + unsupported_domain)
+          sleep(1)
+          click_on '作成する'
+          expect(page).to have_content 'ドメイン名が不正です。'
+        end
+        example 'マルチバイトTLD(.東京)'do
+          fill_in('name', :with => multibyte_domain)
+          sleep(1)
+          click_on '作成する'
+          expect(page).to have_content 'ドメイン名が不正です。'
+        end
+        example 'ラベル63文字超過' do
+          fill_in('name', :with => over63char_label_domain)
+          sleep(1)
+          click_on '作成する'
+          expect(page).to have_content 'ドメイン名が不正です。'
+        end
+        example 'ゾーン名255文字超過' do
+          fill_in('name', :with => over255char_domain)
           sleep(1)
           click_on '作成する'
           expect(page).to have_content 'ドメイン名が不正です。'
         end
       end
     end
-
     describe 'DNSレコード一覧' do
       before do
         sleep(1)
@@ -105,25 +134,44 @@ describe 'DNS' do
           example 'SRVレコード'
         end
         context '登録失敗' do
-          example 'Aレコード' do
-            click_on 'レコード登録'
-            click_on '登録する'
-            sleep(1)
-            within(:css, '#dns_record_create_form > div:nth-child(14) > div > div') do
-              expect(page).to have_content '必須です。'
+          context '必須項目未入力' do
+            example 'Aレコード' do
+              click_on 'レコード登録'
+              click_on '登録する'
+              sleep(1)
+              within(:css, '#dns_record_create_form > div:nth-child(14) > div > div') do
+                expect(page).to have_content '必須です。'
+              end
+              within(:css, '#dns_record_create_form > div:nth-child(16) > div > div') do
+                expect(page).to have_content '必須です。'
+              end
             end
-            within(:css, '#dns_record_create_form > div:nth-child(16) > div > div') do
-              expect(page).to have_content '必須です。'
-            end
+            example 'CNAMEレコード'
+            example 'AAAAレコード'
+            example 'MXレコード'
+            example 'TXTレコード'
+            example 'SRVレコード'
           end
-          example 'CNAMEレコード'
-          example 'AAAAレコード'
-          example 'MXレコード'
-          example 'TXTレコード'
-          example 'SRVレコード'
+          context '限界値外' do
+            example 'Aレコード'
+            example 'CNAMEレコード'
+            example 'AAAAレコード'
+            example 'MXレコード'
+            example 'TXTレコード'
+            example 'SRVレコード'
+          end
+          context '不適切値' do
+            example 'Aレコード'
+            example 'CNAMEレコード'
+            example 'AAAAレコード'
+            example 'MXレコード'
+            example 'TXTレコード'
+            example 'SRVレコード'
+          end
         end
       end
       describe 'レコード詳細' do
+        example 'Aレコード'
         example 'CNAMEレコード'
         example 'AAAAレコード'
         example 'MXレコード'
@@ -133,6 +181,7 @@ describe 'DNS' do
       describe 'レコード削除' do
         context '削除成功' do
           example 'Aレコード'
+          example 'CNAMEレコード'
           example 'AAAAレコード'
           example 'MXレコード'
           example 'TXTレコード'
@@ -140,6 +189,7 @@ describe 'DNS' do
         end
         context '削除失敗' do
           example 'Aレコード'
+          example 'CNAMEレコード'
           example 'AAAAレコード'
           example 'MXレコード'
           example 'TXTレコード'
