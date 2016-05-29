@@ -136,6 +136,7 @@ describe 'DNS' do
           fill_in('name', :with => multibyte_domain)
           sleep(1)
           click_on '作成する'
+          sleep(1)
           expect(page).to have_content 'ドメイン名が不正です。'
         end
         example 'ラベル63文字超過' do
@@ -387,16 +388,95 @@ describe 'DNS' do
               end
             end
             context 'Aレコード' do
-              example '値がIPv4以外(文字列)'
+              example '値がIPv4以外(文字列)' do
+                click_on 'レコード登録'
+                sleep(1)
+                fill_in('name', :with => record_a_label)
+                select 'A', from: 'form-input-type'
+                fill_in('content', :with => 'aaa')
+                click_on '登録する'
+                within(:css, '#dns_record_create_form > div:nth-child(16) > div > div') do
+                  expect(page).to have_content 'IPv4アドレスを入力してください。'
+                end
+              end
             end
             context 'CNAMEレコード' do 
-              example 'レコード名が重複'
-              example '値がFQDN以外'
-              example '値が255文字超過'
+              example '既存CNAMEレコードとレコード名が重複' do
+                click_on 'レコード登録'
+                sleep(1)
+                fill_in('name', :with => record_cname_label)
+                select 'CNAME', from: 'form-input-type'
+                fill_in('content', :with => record_cname_name)
+                click_on '登録する'
+                sleep(1)
+                expect(page).to have_content 'CNAME'
+                within(:css, '#dns_record_create_form > div:nth-child(14) > div > div') do
+                  expect(page).to have_content 'CNAMEレコードは他のデータと共存できません。'
+                end
+              end
+              example '他レコード(CNAME以外)とレコード名が重複' do
+                click_on 'レコード登録'
+                sleep(1)
+                fill_in('name', :with => record_a_label)
+                select 'CNAME', from: 'form-input-type'
+                fill_in('content', :with => record_cname_name)
+                click_on '登録する'
+                sleep(1)
+                expect(page).to have_content 'CNAME'
+                within(:css, '#dns_record_create_form > div:nth-child(14) > div > div') do
+                  expect(page).to have_content 'CNAMEレコードは他のデータと共存できません。'
+                end
+              end
+              example '値のFQDNの末尾に.が付与' do
+                click_on 'レコード登録'
+                sleep(1)
+                fill_in('name', :with => record_cname_label + '2')
+                select 'CNAME', from: 'form-input-type'
+                fill_in('content', :with => record_cname_name + '.')
+                click_on '登録する'
+                sleep(1)
+                expect(page).to have_content 'CNAME'
+                within(:css, '#dns_record_create_form > div:nth-child(16) > div > div') do
+                  expect(page).to have_content '半角英数字、ドット（.）、ハイフン（-）で、255文字以内で入力してください。CNAMEは、同じレコード名に対して1つの値しか登録できません。ホスト名の末尾の.(ドット)は不要です。'
+                end
+              end
+              example '値が255文字超過' do
+                click_on 'レコード登録'
+                sleep(1)
+                fill_in('name', :with => record_cname_label + '2')
+                select 'CNAME', from: 'form-input-type'
+                fill_in('content', :with => domain_name_over255char)
+                click_on '登録する'
+                sleep(1)
+                expect(page).to have_content 'CNAME'
+                within(:css, '#dns_record_create_form > div:nth-child(16) > div > div') do
+                  expect(page).to have_content '255 文字以下で入力してください。'
+                end
+              end
             end
             context 'AAAAレコード' do
-              example '値がIPv6以外(文字列)'
-              example '値がIPv6以外(IPv4)'
+              example '値がIPv6以外(文字列)' do
+                click_on 'レコード登録'
+                sleep(1)
+                fill_in('name', :with => record_aaaa_label)
+                select 'AAAA', from: 'form-input-type'
+                fill_in('content', :with => 'aaa')
+                click_on '登録する'
+                within(:css, '#dns_record_create_form > div:nth-child(16) > div > div') do
+                  expect(page).to have_content 'IPv6アドレスを入力してください。'
+                end
+              end
+              example '値がIPv6以外(IPv4)' do
+                click_on 'レコード登録'
+                sleep(1)
+                fill_in('name', :with => record_aaaa_label)
+                select 'AAAA', from: 'form-input-type'
+                fill_in('content', :with => ip_v4_address)
+                click_on '登録する'
+                within(:css, '#dns_record_create_form > div:nth-child(16) > div > div') do
+                  expect(page).to have_content 'IPv6アドレスを入力してください。'
+                end
+              end
             end
             context 'MXレコード' do
               example '値がFQDN以外'
