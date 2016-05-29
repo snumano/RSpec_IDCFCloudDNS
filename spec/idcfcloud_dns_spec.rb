@@ -33,6 +33,8 @@ multibyte_domain = '日本語.com'
 current_time = Time.now.strftime("%Y%m%d%H%M%S")
 content_txt = 'memo' + current_time
 content_srv = '0 5060 sip.example.com'
+content_txt_over255char_double_quotation = '"' + 'a'*256 + '"'
+content_txt_over1024char = 'a'*1025
 
 domain_name_63char_label = current_time + 'a'*49 + '.com'
 domain_name_over63char_label = current_time + 'a'*50 + '.com'
@@ -479,15 +481,95 @@ describe 'DNS' do
               end
             end
             context 'MXレコード' do
-              example '値がFQDN以外'
-              example '値が255文字超過'
-              example '優先度が文字列'
-              example '優先度が0-65535以外(-1)'
-              example '優先度が0-65535以外(65536)'
+              example '値がFQDN以外' do
+                click_on 'レコード登録'
+                sleep(1)
+                fill_in('name', :with => record_mx_label)
+                select 'MX', from: 'form-input-type'
+                fill_in('content', :with => 'aaa')
+                fill_in('prio', :with => '1')
+                click_on '登録する'
+                sleep(1)
+                within(:css, '#dns_record_create_form > div:nth-child(16) > div > div') do
+                  expect(page).to have_content '半角英数字、ドット（.）、ハイフン（-）で、255文字以内で入力してください。当該レコードの値はAレコードやAAAAレコードをもつものを指定できますが、CNAMEのレコード名を指定する事はできません。ホスト名の末尾の.(ドット)は不要です。'
+                end
+              end
+              example '値が255文字超過' do
+                click_on 'レコード登録'
+                sleep(1)
+                fill_in('name', :with => record_mx_label)
+                select 'MX', from: 'form-input-type'
+                fill_in('content', :with => domain_name_over255char)
+                fill_in('prio', :with => '1')
+                click_on '登録する'
+                sleep(1)
+                within(:css, '#dns_record_create_form > div:nth-child(16) > div > div') do
+                  expect(page).to have_content '255 文字以下で入力してください。'
+                end
+              end
+              example '優先度が文字列' do
+                click_on 'レコード登録'
+                sleep(1)
+                fill_in('name', :with => record_mx_label)
+                select 'MX', from: 'form-input-type'
+                fill_in('content', :with => record_a_name)
+                fill_in('prio', :with => 'aaa')
+                click_on '登録する'
+                sleep(1)
+                within(:css, '#dns_record_create_form > div.row.prio > div > div') do
+                  expect(page).to have_content '半角数字0～65535の間で入力してください。'
+                end
+              end
+              example '優先度が0-65535以外(-1)' do
+                click_on 'レコード登録'
+                sleep(1)
+                fill_in('name', :with => record_mx_label)
+                select 'MX', from: 'form-input-type'
+                fill_in('content', :with => record_a_name)
+                fill_in('prio', :with => -1)
+                click_on '登録する'
+                sleep(1)
+                within(:css, '#dns_record_create_form > div.row.prio > div > div') do
+                  expect(page).to have_content '半角数字0～65535の間で入力してください。'
+                end
+              end
+              example '優先度が0-65535以外(65536)' do
+                click_on 'レコード登録'
+                sleep(1)
+                fill_in('name', :with => record_mx_label)
+                select 'MX', from: 'form-input-type'
+                fill_in('content', :with => record_a_name)
+                fill_in('prio', :with => 65536)
+                click_on '登録する'
+                sleep(1)
+                within(:css, '#dns_record_create_form > div.row.prio > div > div') do
+                  expect(page).to have_content '半角数字0～65535の間で入力してください。'
+                end
+              end
             end
             context 'TXTレコード' do
-              example 'ダブルクォテーション内の文字列が255文字超過'
-              example '全体の文字列が1024文字超過'
+              example 'ダブルクォテーション内の文字列が255文字超過' do
+                click_on 'レコード登録'
+                sleep(1)
+                fill_in('name', :with => record_txt_label)
+                select 'TXT', from: 'form-input-type'
+                fill_in('content', :with => content_txt_over255char_double_quotation)
+                click_on '登録する'
+                within(:css, '#dns_record_create_form > div:nth-child(16) > div > div') do
+                  expect(page).to have_content '半角英数字、半角記号で入力してください。1つの文字列の最大長は255文字です。連結したあとの1つのレコードは1024文字以内で入力してください。'
+                end
+              end
+              example '全体の文字列が1024文字超過' do
+                click_on 'レコード登録'
+                sleep(1)
+                fill_in('name', :with => record_txt_label)
+                select 'TXT', from: 'form-input-type'
+                fill_in('content', :with => content_txt_over1024char)
+                click_on '登録する'
+                within(:css, '#dns_record_create_form > div:nth-child(16) > div > div') do
+                  expect(page).to have_content '半角英数字、半角記号で入力してください。1つの文字列の最大長は255文字です。連結したあとの1つのレコードは1024文字以内で入力してください。'
+                end
+              end
             end
             context 'SRVレコード' do
               example 'weightが0-65535以外(-1)'
