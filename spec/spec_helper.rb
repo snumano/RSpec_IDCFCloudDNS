@@ -3,6 +3,7 @@ require 'selenium-webdriver'
 require 'pry'
 require 'ffaker'
 require 'faker'
+require 'support/utilities'
 
 RSpec.configure do |config|
   config.include Capybara::DSL

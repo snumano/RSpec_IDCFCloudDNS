@@ -8,54 +8,24 @@ require 'spec_helper'
 domain_word = FFaker::Internet.domain_word
 domain_name = domain_word + '.com'
 
+=begin
+def convert_short(record_name)
+  record_name.length > 20 ? record_name[0,20] + '...' : record_name
+end
+=end
+
 record_a_label= 'a'
 record_a_name = record_a_label + '.' + domain_name
-if record_a_name.length > 20
-  record_a_name_short = record_a_name[0,20] + '...'
-else
-  record_a_name_short = record_a_name
-end
-
 record_cname_label= 'cname'
 record_cname_name = record_cname_label + '.' + domain_name
-if record_cname_name.length > 20
-  record_cname_name_short = record_cname_name[0,20] + '...'
-else
-  record_cname_name_short = record_cname_name
-end
-
 record_aaaa_label= 'aaaa'
 record_aaaa_name = record_aaaa_label + '.' + domain_name
-if record_aaaa_name.length > 20
-  record_aaaa_name_short = record_aaaa_name[0,20] + '...'
-else
-  record_aaaa_name_short = record_aaaa_name
-end
-
 record_mx_label= 'mx'
 record_mx_name = record_mx_label + '.' + domain_name
-if record_mx_name.length > 20
-  record_mx_name_short = record_mx_name[0,20] + '...'
-else
-  record_mx_name_short = record_mx_name
-end
-
 record_txt_label= 'txt'
 record_txt_name = record_txt_label + '.' + domain_name
-if record_txt_name.length > 20
-  record_txt_name_short = record_txt_name[0,20] + '...'
-else
-  record_txt_name_short = record_txt_name
-end
-
 record_srv_label= '_sip._udp'
 record_srv_name = record_srv_label + '.' + domain_name
-if record_srv_name.length > 20
-  record_srv_name_short = record_srv_name[0,20] + '...'
-else
-  record_srv_name_short = record_srv_name
-end
-
 ip_v4_address = FFaker::Internet.ip_v4_address
 ip_v6_address = Faker::Internet.ip_v6_address
 unsupported_domain = '.xxx'
@@ -65,20 +35,18 @@ content_txt = 'memo' + current_time
 content_srv = '0 5060 sip.example.com'
 
 domain_name_63char_label = current_time + 'a'*49 + '.com'
-domain_name_63char_label_short = domain_name_63char_label[0,20] + '...'
 domain_name_over63char_label = current_time + 'a'*50 + '.com'
 domain_name_255char  = current_time + 'b'*49 + '.' + 'c'*63 + '.' + 'd'*63 + '.' + 'e'*59 + '.com'
-domain_name_255char_short = domain_name_255char[0,20] + '...'
 domain_name_over255char  = current_time + 'b'*49 + '.' + 'c'*63 + '.' + 'd'*63 + '.' + 'e'*60 + '.com'
+record_name_label_over63char = current_time + 'f'*50 + '.com'
+record_name_all_over255char  = current_time + 'g'*49 + '.' + 'h'*63 + '.' + 'i'*63 + '.' + 'j'*63
 
 p domain_name
 p ip_v4_address
 p ip_v6_address
 p current_time
 p domain_name_63char_label
-p domain_name_63char_label_short
 p domain_name_255char
-p domain_name_255char_short
 p domain_name_over255char
 
 describe 'DNS' do
@@ -206,7 +174,7 @@ describe 'DNS' do
             expect(page).to have_content 'レコードを登録しますか？'
             click_on 'はい'
             sleep(1)
-            expect(page).to have_content record_a_name_short
+            expect(page).to have_content convert_short(record_a_name)
             expect(page).to have_content ip_v4_address
           end
           example 'CNAMEレコード' do
@@ -220,7 +188,7 @@ describe 'DNS' do
             expect(page).to have_content 'レコードを登録しますか？'
             click_on 'はい'
             sleep(1)
-            expect(page).to have_content record_cname_name_short
+            expect(page).to have_content convert_short(record_cname_name)
           end
           example 'AAAAレコード' do
             click_on 'レコード登録'
@@ -233,7 +201,7 @@ describe 'DNS' do
             expect(page).to have_content 'レコードを登録しますか？'
             click_on 'はい'
             sleep(1)
-            expect(page).to have_content record_aaaa_name_short
+            expect(page).to have_content convert_short(record_aaaa_name)
             expect(page).to have_content ip_v6_address
           end
           example 'MXレコード' do
@@ -248,7 +216,7 @@ describe 'DNS' do
             expect(page).to have_content 'レコードを登録しますか？'
             click_on 'はい'
             sleep(1)
-            expect(page).to have_content record_mx_name_short
+            expect(page).to have_content convert_short(record_mx_name)
           end
           example 'TXTレコード' do
             click_on 'レコード登録'
@@ -261,7 +229,7 @@ describe 'DNS' do
             expect(page).to have_content 'レコードを登録しますか？'
             click_on 'はい'
             sleep(1)
-            expect(page).to have_content record_txt_name_short
+            expect(page).to have_content convert_short(record_txt_name)
             expect(page).to have_content content_txt
           end
           example 'SRVレコード' do
@@ -276,7 +244,7 @@ describe 'DNS' do
             expect(page).to have_content 'レコードを登録しますか？'
             click_on 'はい'
             sleep(1)
-            expect(page).to have_content record_srv_name_short
+            expect(page).to have_content convert_short(record_srv_name)
             expect(page).to have_content content_srv
           end
         end
@@ -295,6 +263,8 @@ describe 'DNS' do
                 expect(page).to have_content '必須です。'
               end
             end
+            example 'Aレコード ワイルドカード*'
+            example 'Aレコード ワイルドカード@'
             example 'CNAMEレコード' do
               click_on 'レコード登録'
               select 'CNAME', from: 'form-input-type'
@@ -369,10 +339,52 @@ describe 'DNS' do
           end
           context '異常値' do
             context '全レコード共通' do
-              example 'ラベル名63文字超過'
-              example 'レコード全体255文字超過'
-              example 'TTL600-86400以外(599)'
-              example 'TTL600-86400以外(86401)'
+              example 'ラベル名63文字超過' do
+                click_on 'レコード登録'
+                sleep(1)
+                fill_in('name', :with => record_name_label_over63char)
+                select 'A', from: 'form-input-type'
+                fill_in('content', :with => ip_v4_address)
+                click_on '登録する'
+                sleep(1)
+                expect(page).to have_content '半角英数字とハイフンとピリオドのみでラベル名63文字以内、ドメイン名全体で253文字以内で入力してください。ただし、レコード先頭と末尾にハイフンは使用できません。レコード名の*はワイルドカードとして、@はホスト名空白として設定されます。'
+              end
+              example 'レコード全体255文字超過' do
+                click_on 'レコード登録'
+                sleep(1)
+                fill_in('name', :with => record_name_all_over255char)
+                select 'A', from: 'form-input-type'
+                fill_in('content', :with => ip_v4_address)
+                click_on '登録する'
+                sleep(1)
+                expect(page).to have_content '半角英数字とハイフンとピリオドのみでラベル名63文字以内、ドメイン名全体で253文字以内で入力してください。ただし、レコード先頭と末尾にハイフンは使用できません。レコード名の*はワイルドカードとして、@はホスト名空白として設定されます。'
+              end
+              example 'TTL600-86400以外(599)' do
+                click_on 'レコード登録'
+                sleep(1)
+                fill_in('name', :with => record_a_label)
+                select 'A', from: 'form-input-type'
+                fill_in('content', :with => ip_v4_address)
+                fill_in('ttl', :with => 599)
+                click_on '登録する'
+                sleep(1)
+                within(:css, '#dns_record_create_form > div:nth-child(18) > div > div') do
+                  expect(page).to have_content '半角数字600-86400で入力してください。'
+                end
+              end
+              example 'TTL600-86400以外(86401)' do
+                click_on 'レコード登録'
+                sleep(1)
+                fill_in('name', :with => record_a_label)
+                select 'A', from: 'form-input-type'
+                fill_in('content', :with => ip_v4_address)
+                fill_in('ttl', :with => 86401)
+                click_on '登録する'
+                sleep(1)
+                within(:css, '#dns_record_create_form > div:nth-child(18) > div > div') do
+                  expect(page).to have_content '半角数字600-86400で入力してください。'
+                end
+              end
             end
             context 'Aレコード' do
               example '値がIPv4以外(文字列)'
@@ -435,19 +447,20 @@ describe 'DNS' do
       describe 'DNSゾーン削除' do
         example 'ゾーン名 ***.com' do
           click_on domain_name
-          expect(page).to have_content domain_name
+          expect(page).to have_content convert_short(domain_name)
           # 「DNSゾーン詳細」をクリック。click_onでは動作せず。
           find(:xpath,'//*[@id="zone-detail"]/div/ol/li[1]/a').click
           click_on 'ゾーン削除'
           sleep(1)
           expect(page).to have_content 'このゾーンを削除しますか？'
           click_on 'はい'
-          sleep(1)
+          sleep(2)
           expect(page).to have_content 'ゾーンの削除が完了しました。'
-          click_on 'OK'        
+          click_on 'OK'
+          expect(page).not_to have_content convert_short(domain_name)
         end
         example 'ラベル名63文字' do
-          click_on domain_name_63char_label_short
+          click_on convert_short(domain_name_63char_label)
           expect(page).to have_content domain_name_63char_label
           # 「DNSゾーン詳細」をクリック。click_onでは動作せず。
           find(:xpath,'//*[@id="zone-detail"]/div/ol/li[1]/a').click
@@ -457,10 +470,11 @@ describe 'DNS' do
           click_on 'はい'
           sleep(1)
           expect(page).to have_content 'ゾーンの削除が完了しました。'
-          click_on 'OK'        
+          click_on 'OK'
+          expect(page).not_to have_content domain_name_63char_label
         end
         example 'ゾーン名255文字' do
-          click_on domain_name_255char_short
+          click_on convert_short(domain_name_255char)
           expect(page).to have_content domain_name_255char
           # 「DNSゾーン詳細」をクリック。click_onでは動作せず。
           find(:xpath,'//*[@id="zone-detail"]/div/ol/li[1]/a').click
