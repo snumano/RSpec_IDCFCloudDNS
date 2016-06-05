@@ -10,4 +10,4 @@ RSpec.configure do |config|
 end
 
 Capybara.default_driver = :selenium
-Capybara.app_host = 'https://console.idcfcloud.com'
+Capybara.app_host = 'https://dns-console.cloud.egg.jp'
