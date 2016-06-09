@@ -406,25 +406,23 @@ describe 'DNS' do
         context '登録失敗' do
           context '必須項目未入力' do
             example 'Aレコード' do
-              pending('temp0606') 
               click_on 'レコード登録'
               sleep(1)
-              select 'A', from: 'form-input-type'
+              click_on 'A'
               click_on '登録する'
               sleep(1)
-              expect(page).to have_content 'A'
-              within(:css, '#dns_record_create_form > div:nth-child(14) > div > div') do
+              click_on 'A'
+              within(:css, '#dns_record_create_form > div:nth-child(2) > div') do
                 expect(page).to have_content '必須です。'
               end
-              within(:css, '#dns_record_create_form > div:nth-child(16) > div > div') do
+              within(:css, '#dns_record_create_form > div.form-group.default-value.has-error > div') do
                 expect(page).to have_content '必須です。'
               end
             end
             example 'CNAMEレコード' do
-              pending('temp0606') 
               click_on 'レコード登録'
               sleep(1)
-              select 'CNAME', from: 'form-input-type'
+              click_on 'CNAME'
               click_on '登録する'
               sleep(1)
               expect(page).to have_content 'CNAME'
@@ -436,10 +434,9 @@ describe 'DNS' do
               end
             end
             example 'AAAAレコード' do
-              pending('temp0606') 
               click_on 'レコード登録'
               sleep(1)
-              select 'AAAA', from: 'form-input-type'
+              click_on 'AAAA'
               click_on '登録する'
               sleep(1)
               expect(page).to have_content 'AAAA'
@@ -451,10 +448,9 @@ describe 'DNS' do
               end
             end
             example 'MXレコード' do
-              pending('temp0606') 
               click_on 'レコード登録'
               sleep(1)
-              select 'MX', from: 'form-input-type'
+              click_on 'MX'
               click_on '登録する'
               sleep(1)
               expect(page).to have_content 'MX'
@@ -469,10 +465,9 @@ describe 'DNS' do
               end
             end
             example 'TXTレコード' do
-              pending('temp0606') 
               click_on 'レコード登録'
               sleep(1)
-              select 'TXT', from: 'form-input-type'
+              click_on 'TXT'
               click_on '登録する'
               sleep(1)
               expect(page).to have_content 'TXT'
@@ -484,10 +479,9 @@ describe 'DNS' do
               end
             end
             example 'SRVレコード' do
-              pending('temp0606') 
               click_on 'レコード登録'
               sleep(1)
-              select 'SRV', from: 'form-input-type'
+              click_on 'SRV'
               click_on '登録する'
               sleep(1)
               expect(page).to have_content 'SRV'
@@ -505,7 +499,6 @@ describe 'DNS' do
           context '異常値' do
             context '全レコード共通' do
               example 'ラベル名63文字超過' do
-                pending('temp0606') 
                 click_on 'レコード登録'
                 sleep(1)
                 fill_in('name', :with => record_name_label_over63char)
@@ -516,7 +509,6 @@ describe 'DNS' do
                 expect(page).to have_content '半角英数字とハイフンとピリオドのみでラベル名63文字以内、ドメイン名全体で253文字以内で入力してください。ただし、レコード先頭と末尾にハイフンは使用できません。レコード名の*はワイルドカードとして、@はホスト名空白として設定されます。'
               end
               example 'レコード全体255文字超過' do
-                pending('temp0606') 
                 click_on 'レコード登録'
                 sleep(1)
                 fill_in('name', :with => record_name_all_over255char)
@@ -527,7 +519,6 @@ describe 'DNS' do
                 expect(page).to have_content '半角英数字とハイフンとピリオドのみでラベル名63文字以内、ドメイン名全体で253文字以内で入力してください。ただし、レコード先頭と末尾にハイフンは使用できません。レコード名の*はワイルドカードとして、@はホスト名空白として設定されます。'
               end
               example 'TTL600-86400以外(599)' do
-                pending('temp0606') 
                 click_on 'レコード登録'
                 sleep(1)
                 fill_in('name', :with => record_a_label)
@@ -541,7 +532,6 @@ describe 'DNS' do
                 end
               end
               example 'TTL600-86400以外(86401)' do
-                pending('temp0606') 
                 click_on 'レコード登録'
                 sleep(1)
                 fill_in('name', :with => record_a_label)
@@ -557,7 +547,6 @@ describe 'DNS' do
             end
             context 'Aレコード' do
               example '値がIPv4以外(文字列)' do
-                pending('temp0606') 
                 click_on 'レコード登録'
                 sleep(1)
                 fill_in('name', :with => record_a_label)
@@ -571,7 +560,6 @@ describe 'DNS' do
             end
             context 'CNAMEレコード' do
               example 'レコード名空白@' do
-                pending('temp0606') 
                 click_on 'レコード登録'
                 sleep(1)
                 fill_in('name', :with => '@')
@@ -584,7 +572,6 @@ describe 'DNS' do
                 end
               end
               example '既存CNAMEレコードとレコード名が重複' do
-                pending('temp0606') 
                 click_on 'レコード登録'
                 sleep(1)
                 fill_in('name', :with => record_cname_label)
@@ -598,7 +585,6 @@ describe 'DNS' do
                 end
               end
               example '他レコード(CNAME以外)とレコード名が重複' do
-                pending('temp0606') 
                 click_on 'レコード登録'
                 sleep(1)
                 fill_in('name', :with => record_a_label)
@@ -612,7 +598,6 @@ describe 'DNS' do
                 end
               end
               example '値のFQDNの末尾に.が付与' do
-                pending('temp0606') 
                 click_on 'レコード登録'
                 sleep(1)
                 fill_in('name', :with => record_cname_label + '2')
@@ -626,7 +611,6 @@ describe 'DNS' do
                 end
               end
               example '値が255文字超過' do
-                pending('temp0606') 
                 click_on 'レコード登録'
                 sleep(1)
                 fill_in('name', :with => record_cname_label + '2')
@@ -642,7 +626,6 @@ describe 'DNS' do
             end
             context 'AAAAレコード' do
               example '値がIPv6以外(文字列)' do
-                pending('temp0606') 
                 click_on 'レコード登録'
                 sleep(1)
                 fill_in('name', :with => record_aaaa_label)
@@ -654,7 +637,6 @@ describe 'DNS' do
                 end
               end
               example '値がIPv6以外(IPv4)' do
-                pending('temp0606') 
                 click_on 'レコード登録'
                 sleep(1)
                 fill_in('name', :with => record_aaaa_label)
@@ -668,7 +650,6 @@ describe 'DNS' do
             end
             context 'MXレコード' do
               example '値がFQDN以外' do
-                pending('temp0606') 
                 click_on 'レコード登録'
                 sleep(1)
                 fill_in('name', :with => record_mx_label)
@@ -682,7 +663,6 @@ describe 'DNS' do
                 end
               end
               example '値が255文字超過' do
-                pending('temp0606') 
                 click_on 'レコード登録'
                 sleep(1)
                 fill_in('name', :with => record_mx_label)
@@ -696,7 +676,6 @@ describe 'DNS' do
                 end
               end
               example '優先度が文字列' do
-                pending('temp0606') 
                 click_on 'レコード登録'
                 sleep(1)
                 fill_in('name', :with => record_mx_label)
@@ -710,7 +689,6 @@ describe 'DNS' do
                 end
               end
               example '優先度が0-65535以外(-1)' do
-                pending('temp0606') 
                 click_on 'レコード登録'
                 sleep(1)
                 fill_in('name', :with => record_mx_label)
@@ -724,7 +702,6 @@ describe 'DNS' do
                 end
               end
               example '優先度が0-65535以外(65536)' do
-                pending('temp0606') 
                 click_on 'レコード登録'
                 sleep(1)
                 fill_in('name', :with => record_mx_label)
@@ -740,7 +717,6 @@ describe 'DNS' do
             end
             context 'TXTレコード' do
               example 'ダブルクォテーション内の文字列が255文字超過' do
-                pending('temp0606') 
                 click_on 'レコード登録'
                 sleep(1)
                 fill_in('name', :with => record_txt_label)
@@ -752,7 +728,6 @@ describe 'DNS' do
                 end
               end
               example '全体の文字列が1024文字超過' do
-                pending('temp0606') 
                 click_on 'レコード登録'
                 sleep(1)
                 fill_in('name', :with => record_txt_label)
@@ -766,7 +741,6 @@ describe 'DNS' do
             end
             context 'SRVレコード' do
               example 'レコード名がフォーマット外' do
-                pending('temp0606') 
                 click_on 'レコード登録'
                 sleep(1)
                 fill_in('name', :with => 'aaa')
@@ -780,7 +754,6 @@ describe 'DNS' do
                 end
               end
               example 'weightが0-65535以外(-1)' do
-                pending('temp0606') 
                 click_on 'レコード登録'
                 sleep(1)
                 fill_in('name', :with => record_srv_label)
@@ -794,7 +767,6 @@ describe 'DNS' do
                 end
               end
               example 'weightが0-65535以外(65536)' do
-                pending('temp0606') 
                 click_on 'レコード登録'
                 sleep(1)
                 fill_in('name', :with => record_srv_label)
@@ -808,7 +780,6 @@ describe 'DNS' do
                 end
               end
               example 'portが0-65535以外(-1)' do
-                pending('temp0606') 
                 click_on 'レコード登録'
                 sleep(1)
                 fill_in('name', :with => record_srv_label)
@@ -822,7 +793,6 @@ describe 'DNS' do
                 end
               end
               example 'portが0-65535以外(65536)' do
-                pending('temp0606') 
                 click_on 'レコード登録'
                 sleep(1)
                 fill_in('name', :with => record_srv_label)
@@ -836,7 +806,6 @@ describe 'DNS' do
                 end
               end
               example 'ホスト名が未入力' do
-                pending('temp0606') 
                 click_on 'レコード登録'
                 sleep(1)
                 fill_in('name', :with => record_srv_label)
@@ -850,7 +819,6 @@ describe 'DNS' do
                 end
               end
               example 'ホスト名がFQDN以外' do
-                pending('temp0606') 
                 click_on 'レコード登録'
                 sleep(1)
                 fill_in('name', :with => record_srv_label)
@@ -864,7 +832,6 @@ describe 'DNS' do
                 end
               end
               example '優先度が0-65535以外(-1)' do
-                pending('temp0606') 
                 click_on 'レコード登録'
                 sleep(1)
                 fill_in('name', :with => record_srv_label)
@@ -878,7 +845,6 @@ describe 'DNS' do
                 end
               end
               example '優先度が0-65535以外(65536)' do
-                pending('temp0606') 
                 click_on 'レコード登録'
                 sleep(1)
                 fill_in('name', :with => record_srv_label)
@@ -909,7 +875,6 @@ describe 'DNS' do
       end
       describe 'レコード削除' do
         example 'Aレコード' do
-          pending('temp0606') 
           find(:xpath,'(//button[@type="button"])[7]').click
           sleep(1)
           expect(page).to have_content 'レコードを削除しますか？'
@@ -921,7 +886,6 @@ describe 'DNS' do
 #    end   # temp
     describe 'ゾーン削除' do
       example 'ゾーン名 ***.com' do
-        pending('temp0606') 
 #        save_and_open_page
         click_on domain_name
         expect(page).to have_content convert_short(domain_name)
@@ -937,7 +901,6 @@ describe 'DNS' do
         expect(page).not_to have_content convert_short(domain_name)
       end
       example 'ラベル名63文字' do
-        pending('temp0606') 
         click_on convert_short(domain_name_63char_label)
         expect(page).to have_content domain_name_63char_label
         # 「DNSゾーン詳細」をクリック。click_onでは動作せず。
@@ -952,7 +915,6 @@ describe 'DNS' do
         expect(page).not_to have_content domain_name_63char_label
       end
       example 'ゾーン名255文字' do
-        pending('temp0606') 
         click_on convert_short(domain_name_255char)
         expect(page).to have_content domain_name_255char
         # 「DNSゾーン詳細」をクリック。click_onでは動作せず。
@@ -975,9 +937,7 @@ describe 'DNS' do
       click_on 'テンプレート'
     end
     it_should_behave_like 'check the sidebar'
-    example{
-      pending('temp0606') 
-expect(page).to have_content 'DNSテンプレート一覧'}
+    example{expect(page).to have_content 'DNSテンプレート一覧'}
   end
 
   describe '逆引き' do
@@ -987,12 +947,8 @@ expect(page).to have_content 'DNSテンプレート一覧'}
     end
 
     it_should_behave_like 'check the sidebar'
-    example{
-      pending('temp0606') 
-expect(page).to have_content '逆引き'}
-    example{
-      pending('temp0606') 
-expect(page).to have_content 'IPアドレス名'}
+    example{expect(page).to have_content '逆引き'}
+    example{expect(page).to have_content 'IPアドレス名'}
   end
 
   describe '操作ログ' do
@@ -1002,15 +958,9 @@ expect(page).to have_content 'IPアドレス名'}
     end
 
     it_should_behave_like 'check the sidebar'
-    example{
-      pending('temp0606') 
-expect(page).to have_content '操作ログ'}
-    example{
-      pending('temp0606') 
-expect(page).to have_content '日時'}
-    example{
-      pending('temp0606') 
-expect(page).to have_content '対象'}
+    example{expect(page).to have_content '操作ログ'}
+    example{expect(page).to have_content '日時'}
+    example{expect(page).to have_content '対象'}
   end
 
   describe '利用規約' do
@@ -1022,11 +972,7 @@ expect(page).to have_content '対象'}
     end
 
     it_should_behave_like 'check the sidebar'
-    example{
-      pending('temp0606') 
-expect(page).to have_content '利用規約'}
-    example{
-      pending('temp0606') 
-expect(page).to have_content 'DNS料金プラン'}
+    example{expect(page).to have_content '利用規約'}
+    example{expect(page).to have_content 'DNS料金プラン'}
   end
 end
