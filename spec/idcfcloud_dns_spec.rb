@@ -85,7 +85,7 @@ describe 'DNS' do
       end
       context '成功' do
         example 'ゾーン名 ***.com' do
-          sleep(1)
+          sleep(2)
           fill_in('name', :with => domain_name)
           sleep(1)
           click_on '作成する'
@@ -172,10 +172,8 @@ describe 'DNS' do
             click_on 'レコード登録'
             sleep(1)
             click_on 'A'
-#            find(:xpath,"(//button[@type='button'])[8]").click
             sleep(1)
             fill_in('name', :with => record_a_label)
-#            select 'A', from: 'form-input-type'
             fill_in('content', :with => ip_v4_address)
             click_on '登録する'
             sleep(1)
@@ -189,10 +187,8 @@ describe 'DNS' do
             click_on 'レコード登録'
             sleep(1)
             click_on 'A'
-#            find(:xpath,"(//button[@type='button'])[8]").click
-            sleep(2)
+            sleep(1)
             fill_in('name', :with => '*')
-#            select 'A', from: 'form-input-type'
             fill_in('content', :with => ip_v4_address)
             click_on '登録する'
             sleep(1)
@@ -203,10 +199,8 @@ describe 'DNS' do
             click_on 'レコード登録'
             sleep(1)
             click_on 'A'
-#            find(:xpath,"(//button[@type='button'])[8]").click
-            sleep(2)
+            sleep(1)
             fill_in('name', :with => '@')
-#            select 'A', from: 'form-input-type'
             fill_in('content', :with => ip_v4_address)
             click_on '登録する'
             sleep(1)
@@ -217,10 +211,8 @@ describe 'DNS' do
             click_on 'レコード登録'
             sleep(1)
             click_on 'CNAME'
-#            find(:xpath,"(//button[@type='button'])[10]").click
-            sleep(2)
+            sleep(1)
             fill_in('name', :with => record_cname_label)
-#            select 'CNAME', from: 'form-input-type'
             fill_in('content', :with => record_a_name)
             click_on '登録する'
             sleep(1)
@@ -234,10 +226,8 @@ describe 'DNS' do
             click_on 'レコード登録'
             sleep(1)
             click_on 'CNAME'
-#            find(:xpath,"(//button[@type='button'])[10]").click
             sleep(1)
             fill_in('name', :with => '*')
-#            select 'CNAME', from: 'form-input-type'
             fill_in('content', :with => record_a_name)
             click_on '登録する'
             sleep(1)
@@ -248,15 +238,13 @@ describe 'DNS' do
           end
           example 'AAAAレコード' do
             click_on 'レコード登録'
-            sleep(2)
+            sleep(1)
             click_on 'AAAA'
-#            find(:xpath,"(//button[@type='button'])[9]").click
-            sleep(2)
+            sleep(1)
             fill_in('name', :with => record_aaaa_label)
-#            select 'AAAA', from: 'form-input-type'
             fill_in('content', :with => ip_v6_address)
             click_on '登録する'
-            sleep(2)
+            sleep(1)
             expect(page).to have_content 'レコードを登録しますか？'
             click_on 'はい'
             sleep(1)
@@ -267,13 +255,11 @@ describe 'DNS' do
             click_on 'レコード登録'
             sleep(1)
             click_on 'AAAA'
-#            find(:xpath,"(//button[@type='button'])[9]").click
-            sleep(2)
+            sleep(1)
             fill_in('name', :with => '*')
-#            select 'AAAA', from: 'form-input-type'
             fill_in('content', :with => ip_v6_address)
             click_on '登録する'
-            sleep(2)
+            sleep(1)
             expect(page).to have_content 'レコードを登録しますか？'
             click_on 'はい'
           end
@@ -281,13 +267,11 @@ describe 'DNS' do
             click_on 'レコード登録'
             sleep(1)
             click_on 'AAAA'
-#            find(:xpath,"(//button[@type='button'])[9]").click
-            sleep(2)
+            sleep(1)
             fill_in('name', :with => '@')
-#            select 'AAAA', from: 'form-input-type'
             fill_in('content', :with => ip_v6_address)
             click_on '登録する'
-            sleep(2)
+            sleep(1)
             expect(page).to have_content 'レコードを登録しますか？'
             click_on 'はい'
           end
@@ -295,14 +279,12 @@ describe 'DNS' do
             click_on 'レコード登録'
             sleep(1)
             click_on 'MX'
-#            find(:xpath,"(//button[@type='button'])[11]").click
-            sleep(2)
+            sleep(1)
             fill_in('name', :with => record_mx_label)
-#            select 'MX', from: 'form-input-type'
             fill_in('content', :with => record_a_name)
             fill_in('prio', :with => '1')
             click_on '登録する'
-            sleep(2)
+            sleep(1)
             expect(page).to have_content 'レコードを登録しますか？'
             click_on 'はい'
             sleep(1)
@@ -312,14 +294,12 @@ describe 'DNS' do
             click_on 'レコード登録'
             sleep(1)
             click_on 'MX'
-#            find(:xpath,"(//button[@type='button'])[11]").click
-            sleep(2)
+            sleep(1)
             fill_in('name', :with => '*')
-#            select 'MX', from: 'form-input-type'
             fill_in('content', :with => record_a_name)
             fill_in('prio', :with => '1')
             click_on '登録する'
-            sleep(2)
+            sleep(1)
             expect(page).to have_content 'レコードを登録しますか？'
             click_on 'はい'
           end
@@ -327,10 +307,8 @@ describe 'DNS' do
             click_on 'レコード登録'
             sleep(1)
             click_on 'MX'
-#            find(:xpath,"(//button[@type='button'])[11]").click
-            sleep(2)
+            sleep(1)
             fill_in('name', :with => '@')
-#            select 'MX', from: 'form-input-type'
             fill_in('content', :with => record_a_name)
             fill_in('prio', :with => '1')
             click_on '登録する'
@@ -342,10 +320,8 @@ describe 'DNS' do
             click_on 'レコード登録'
             sleep(1)
             click_on 'TXT'
-#            find(:xpath,"(//button[@type='button'])[12]").click
-            sleep(2)
+            sleep(1)
             fill_in('name', :with => record_txt_label)
-#            select 'TXT', from: 'form-input-type'
             fill_in('content', :with => content_txt)
             click_on '登録する'
             sleep(2)
@@ -357,15 +333,13 @@ describe 'DNS' do
           end
           example 'TXTレコード ワイルドカード*' do
             click_on 'レコード登録'
-            sleep(2)
+            sleep(1)
             click_on 'TXT'
-#            find(:xpath,"(//button[@type='button'])[12]").click
-            sleep(2)
+            sleep(1)
             fill_in('name', :with => '*')
-#            select 'TXT', from: 'form-input-type'
             fill_in('content', :with => content_txt)
             click_on '登録する'
-            sleep(2)
+            sleep(1)
             expect(page).to have_content 'レコードを登録しますか？'
             click_on 'はい'
           end
@@ -373,10 +347,8 @@ describe 'DNS' do
             click_on 'レコード登録'
             sleep(1)
             click_on 'TXT'
-#            find(:xpath,"(//button[@type='button'])[12]").click
-            sleep(2)
+            sleep(1)
             fill_in('name', :with => '@')
-#            select 'TXT', from: 'form-input-type'
             fill_in('content', :with => content_txt)
             click_on '登録する'
             sleep(2)
@@ -388,10 +360,8 @@ describe 'DNS' do
             click_on 'レコード登録'
             sleep(1)
             click_on 'SRV'
-#            find(:xpath,"(//button[@type='button'])[13]").click
-            sleep(2)
+            sleep(1)
             fill_in('name', :with => record_srv_label)
-#            select 'SRV', from: 'form-input-type'
             fill_in('content', :with => content_srv)
             fill_in('prio', :with => '1')
             click_on '登録する'
@@ -409,13 +379,13 @@ describe 'DNS' do
               click_on 'レコード登録'
               sleep(1)
               click_on 'A'
+              sleep(1)
               click_on '登録する'
               sleep(1)
-              click_on 'A'
-              within(:css, '#dns_record_create_form > div:nth-child(2) > div') do
+              within(:css, 'div.has-error:nth-child(2)') do
                 expect(page).to have_content '必須です。'
               end
-              within(:css, '#dns_record_create_form > div.form-group.default-value.has-error > div') do
+              within(:css, 'div.default-value > div:nth-child(2)') do
                 expect(page).to have_content '必須です。'
               end
             end
@@ -423,13 +393,13 @@ describe 'DNS' do
               click_on 'レコード登録'
               sleep(1)
               click_on 'CNAME'
+              sleep(1)
               click_on '登録する'
               sleep(1)
-              expect(page).to have_content 'CNAME'
-              within(:css, '#dns_record_create_form > div:nth-child(14) > div > div') do
+              within(:css, 'div.has-error:nth-child(2)') do
                 expect(page).to have_content '必須です。'
               end
-              within(:css, '#dns_record_create_form > div:nth-child(16) > div > div') do
+              within(:css, 'div.default-value > div:nth-child(2)') do
                 expect(page).to have_content '必須です。'
               end
             end
@@ -437,13 +407,13 @@ describe 'DNS' do
               click_on 'レコード登録'
               sleep(1)
               click_on 'AAAA'
+              sleep(1)
               click_on '登録する'
               sleep(1)
-              expect(page).to have_content 'AAAA'
-              within(:css, '#dns_record_create_form > div:nth-child(14) > div > div') do
+              within(:css, 'div.has-error:nth-child(2)') do
                 expect(page).to have_content '必須です。'
               end
-              within(:css, '#dns_record_create_form > div:nth-child(16) > div > div') do
+              within(:css, 'div.default-value > div:nth-child(2)') do
                 expect(page).to have_content '必須です。'
               end
             end
@@ -451,16 +421,16 @@ describe 'DNS' do
               click_on 'レコード登録'
               sleep(1)
               click_on 'MX'
+              sleep(1)
               click_on '登録する'
               sleep(1)
-              expect(page).to have_content 'MX'
-              within(:css, '#dns_record_create_form > div:nth-child(14) > div > div') do
+              within(:css, 'div.has-error:nth-child(2)') do
                 expect(page).to have_content '必須です。'
               end
-              within(:css, '#dns_record_create_form > div:nth-child(16) > div > div') do
+              within(:css, 'div.default-value > div:nth-child(2)') do
                 expect(page).to have_content '必須です。'
               end
-              within(:css, '#dns_record_create_form > div.row.prio > div > div') do
+              within(:css, '#dns_record_create_form > div.type_part.form-group.has-error') do
                 expect(page).to have_content '必須です。'
               end
             end
@@ -468,13 +438,13 @@ describe 'DNS' do
               click_on 'レコード登録'
               sleep(1)
               click_on 'TXT'
+              sleep(1)
               click_on '登録する'
               sleep(1)
-              expect(page).to have_content 'TXT'
-              within(:css, '#dns_record_create_form > div:nth-child(14) > div > div') do
+              within(:css, 'div.has-error:nth-child(2)') do
                 expect(page).to have_content '必須です。'
               end
-              within(:css, '#dns_record_create_form > div:nth-child(16) > div > div') do
+              within(:css, 'div.default-value > div:nth-child(2)') do
                 expect(page).to have_content '必須です。'
               end
             end
@@ -482,16 +452,16 @@ describe 'DNS' do
               click_on 'レコード登録'
               sleep(1)
               click_on 'SRV'
+              sleep(1)
               click_on '登録する'
               sleep(1)
-              expect(page).to have_content 'SRV'
-              within(:css, '#dns_record_create_form > div:nth-child(14) > div > div') do
+              within(:css, 'div.has-error:nth-child(2)') do
                 expect(page).to have_content '必須です。'
               end
-              within(:css, '#dns_record_create_form > div:nth-child(16) > div > div') do
+              within(:css, 'div.default-value > div:nth-child(2)') do
                 expect(page).to have_content '必須です。'
               end
-              within(:css, '#dns_record_create_form > div.row.prio > div > div') do
+              within(:css, '#dns_record_create_form > div.type_part.form-group.has-error') do
                 expect(page).to have_content '必須です。'
               end
             end
@@ -501,18 +471,21 @@ describe 'DNS' do
               example 'ラベル名63文字超過' do
                 click_on 'レコード登録'
                 sleep(1)
+                click_on 'A'
+                sleep(1)
                 fill_in('name', :with => record_name_label_over63char)
-                select 'A', from: 'form-input-type'
+
                 fill_in('content', :with => ip_v4_address)
                 click_on '登録する'
-                sleep(1)
+                sleep(2)
                 expect(page).to have_content '半角英数字とハイフンとピリオドのみでラベル名63文字以内、ドメイン名全体で253文字以内で入力してください。ただし、レコード先頭と末尾にハイフンは使用できません。レコード名の*はワイルドカードとして、@はホスト名空白として設定されます。'
               end
               example 'レコード全体255文字超過' do
                 click_on 'レコード登録'
                 sleep(1)
+                click_on 'A'
+                sleep(1)
                 fill_in('name', :with => record_name_all_over255char)
-                select 'A', from: 'form-input-type'
                 fill_in('content', :with => ip_v4_address)
                 click_on '登録する'
                 sleep(1)
@@ -521,26 +494,28 @@ describe 'DNS' do
               example 'TTL600-86400以外(599)' do
                 click_on 'レコード登録'
                 sleep(1)
+                click_on 'A'
+                sleep(1)
                 fill_in('name', :with => record_a_label)
-                select 'A', from: 'form-input-type'
                 fill_in('content', :with => ip_v4_address)
                 fill_in('ttl', :with => 599)
                 click_on '登録する'
-                sleep(1)
-                within(:css, '#dns_record_create_form > div:nth-child(18) > div > div') do
+                sleep(2)
+                within(:css, '#dns_record_create_form > div.type_part.form-group.has-error') do
                   expect(page).to have_content '半角数字600-86400で入力してください。'
                 end
               end
               example 'TTL600-86400以外(86401)' do
                 click_on 'レコード登録'
                 sleep(1)
+                click_on 'A'
+                sleep(1)
                 fill_in('name', :with => record_a_label)
-                select 'A', from: 'form-input-type'
                 fill_in('content', :with => ip_v4_address)
                 fill_in('ttl', :with => 86401)
                 click_on '登録する'
-                sleep(1)
-                within(:css, '#dns_record_create_form > div:nth-child(18) > div > div') do
+                sleep(2)
+                within(:css, '#dns_record_create_form > div.type_part.form-group.has-error') do
                   expect(page).to have_content '半角数字600-86400で入力してください。'
                 end
               end
@@ -549,11 +524,12 @@ describe 'DNS' do
               example '値がIPv4以外(文字列)' do
                 click_on 'レコード登録'
                 sleep(1)
+                click_on 'A'
+                sleep(1)
                 fill_in('name', :with => record_a_label)
-                select 'A', from: 'form-input-type'
                 fill_in('content', :with => 'aaa')
                 click_on '登録する'
-                within(:css, '#dns_record_create_form > div:nth-child(16) > div > div') do
+                within(:css, 'div.default-value > div:nth-child(2)') do
                   expect(page).to have_content 'IPv4アドレスを入力してください。'
                 end
               end
@@ -562,64 +538,68 @@ describe 'DNS' do
               example 'レコード名空白@' do
                 click_on 'レコード登録'
                 sleep(1)
+                click_on 'CNAME'
+                sleep(1)
                 fill_in('name', :with => '@')
-                select 'CNAME', from: 'form-input-type'
                 fill_in('content', :with => record_a_name)
                 click_on '登録する'
                 sleep(1)
-                within(:css, '#dns_record_create_form > div:nth-child(14) > div > div') do
+                within(:css, 'div.has-error:nth-child(2)') do
                   expect(page).to have_content 'CNAMEレコードは他のデータと共存できません。'
                 end
               end
               example '既存CNAMEレコードとレコード名が重複' do
                 click_on 'レコード登録'
                 sleep(1)
+                click_on 'CNAME'
+                sleep(1)
                 fill_in('name', :with => record_cname_label)
-                select 'CNAME', from: 'form-input-type'
                 fill_in('content', :with => record_cname_name)
                 click_on '登録する'
                 sleep(1)
                 expect(page).to have_content 'CNAME'
-                within(:css, '#dns_record_create_form > div:nth-child(14) > div > div') do
+                within(:css, 'div.has-error:nth-child(2)') do
                   expect(page).to have_content 'CNAMEレコードは他のデータと共存できません。'
                 end
               end
               example '他レコード(CNAME以外)とレコード名が重複' do
                 click_on 'レコード登録'
                 sleep(1)
+                click_on 'CNAME'
+                sleep(1)
                 fill_in('name', :with => record_a_label)
-                select 'CNAME', from: 'form-input-type'
                 fill_in('content', :with => record_cname_name)
                 click_on '登録する'
                 sleep(1)
                 expect(page).to have_content 'CNAME'
-                within(:css, '#dns_record_create_form > div:nth-child(14) > div > div') do
+                within(:css, 'div.has-error:nth-child(2)') do
                   expect(page).to have_content 'CNAMEレコードは他のデータと共存できません。'
                 end
               end
               example '値のFQDNの末尾に.が付与' do
                 click_on 'レコード登録'
                 sleep(1)
+                click_on 'CNAME'
+                sleep(1)
                 fill_in('name', :with => record_cname_label + '2')
-                select 'CNAME', from: 'form-input-type'
                 fill_in('content', :with => record_cname_name + '.')
                 click_on '登録する'
                 sleep(1)
                 expect(page).to have_content 'CNAME'
-                within(:css, '#dns_record_create_form > div:nth-child(16) > div > div') do
+                within(:css, 'div.default-value > div:nth-child(2)') do
                   expect(page).to have_content '半角英数字、ドット（.）、ハイフン（-）で、255文字以内で入力してください。CNAMEは、同じレコード名に対して1つの値しか登録できません。ホスト名の末尾の.(ドット)は不要です。'
                 end
               end
               example '値が255文字超過' do
                 click_on 'レコード登録'
                 sleep(1)
+                click_on 'CNAME'
+                sleep(1)
                 fill_in('name', :with => record_cname_label + '2')
-                select 'CNAME', from: 'form-input-type'
                 fill_in('content', :with => domain_name_over255char)
                 click_on '登録する'
-                sleep(1)
-                expect(page).to have_content 'CNAME'
-                within(:css, '#dns_record_create_form > div:nth-child(16) > div > div') do
+                sleep(2)
+                within(:css, 'div.default-value > div:nth-child(2)') do
                   expect(page).to have_content '255 文字以下で入力してください。'
                 end
               end
@@ -628,22 +608,24 @@ describe 'DNS' do
               example '値がIPv6以外(文字列)' do
                 click_on 'レコード登録'
                 sleep(1)
+                click_on 'AAAA'
+                sleep(1)
                 fill_in('name', :with => record_aaaa_label)
-                select 'AAAA', from: 'form-input-type'
                 fill_in('content', :with => 'aaa')
                 click_on '登録する'
-                within(:css, '#dns_record_create_form > div:nth-child(16) > div > div') do
+                within(:css, 'div.default-value > div:nth-child(2)') do
                   expect(page).to have_content 'IPv6アドレスを入力してください。'
                 end
               end
               example '値がIPv6以外(IPv4)' do
                 click_on 'レコード登録'
                 sleep(1)
+                click_on 'AAAA'
+                sleep(1)
                 fill_in('name', :with => record_aaaa_label)
-                select 'AAAA', from: 'form-input-type'
                 fill_in('content', :with => ip_v4_address)
                 click_on '登録する'
-                within(:css, '#dns_record_create_form > div:nth-child(16) > div > div') do
+                within(:css, 'div.default-value > div:nth-child(2)') do
                   expect(page).to have_content 'IPv6アドレスを入力してください。'
                 end
               end
@@ -652,65 +634,70 @@ describe 'DNS' do
               example '値がFQDN以外' do
                 click_on 'レコード登録'
                 sleep(1)
+                click_on 'MX'
+                sleep(1)
                 fill_in('name', :with => record_mx_label)
-                select 'MX', from: 'form-input-type'
                 fill_in('content', :with => 'aaa')
                 fill_in('prio', :with => '1')
                 click_on '登録する'
                 sleep(1)
-                within(:css, '#dns_record_create_form > div:nth-child(16) > div > div') do
+                within(:css, 'div.default-value > div:nth-child(2)') do
                   expect(page).to have_content '半角英数字、ドット（.）、ハイフン（-）で、255文字以内で入力してください。当該レコードの値はAレコードやAAAAレコードをもつものを指定できますが、CNAMEのレコード名を指定する事はできません。ホスト名の末尾の.(ドット)は不要です。'
                 end
               end
               example '値が255文字超過' do
                 click_on 'レコード登録'
                 sleep(1)
+                click_on 'MX'
+                sleep(1)
                 fill_in('name', :with => record_mx_label)
-                select 'MX', from: 'form-input-type'
                 fill_in('content', :with => domain_name_over255char)
                 fill_in('prio', :with => '1')
                 click_on '登録する'
-                sleep(1)
-                within(:css, '#dns_record_create_form > div:nth-child(16) > div > div') do
+                sleep(2)
+                within(:css, 'div.default-value > div:nth-child(2)') do
                   expect(page).to have_content '255 文字以下で入力してください。'
                 end
               end
               example '優先度が文字列' do
                 click_on 'レコード登録'
                 sleep(1)
+                click_on 'MX'
+                sleep(1)
                 fill_in('name', :with => record_mx_label)
-                select 'MX', from: 'form-input-type'
                 fill_in('content', :with => record_a_name)
                 fill_in('prio', :with => 'aaa')
                 click_on '登録する'
                 sleep(1)
-                within(:css, '#dns_record_create_form > div.row.prio > div > div') do
+                within(:css, '#dns_record_create_form > div.type_part.form-group.has-error') do
                   expect(page).to have_content '半角数字0～65535の間で入力してください。'
                 end
               end
               example '優先度が0-65535以外(-1)' do
                 click_on 'レコード登録'
                 sleep(1)
+                click_on 'MX'
+                sleep(1)
                 fill_in('name', :with => record_mx_label)
-                select 'MX', from: 'form-input-type'
                 fill_in('content', :with => record_a_name)
                 fill_in('prio', :with => -1)
                 click_on '登録する'
                 sleep(1)
-                within(:css, '#dns_record_create_form > div.row.prio > div > div') do
+                within(:css, '#dns_record_create_form > div.type_part.form-group.has-error') do
                   expect(page).to have_content '半角数字0～65535の間で入力してください。'
                 end
               end
               example '優先度が0-65535以外(65536)' do
                 click_on 'レコード登録'
                 sleep(1)
+                click_on 'MX'
+                sleep(1)
                 fill_in('name', :with => record_mx_label)
-                select 'MX', from: 'form-input-type'
                 fill_in('content', :with => record_a_name)
                 fill_in('prio', :with => 65536)
                 click_on '登録する'
                 sleep(1)
-                within(:css, '#dns_record_create_form > div.row.prio > div > div') do
+                within(:css, '#dns_record_create_form > div.type_part.form-group.has-error') do
                   expect(page).to have_content '半角数字0～65535の間で入力してください。'
                 end
               end
@@ -719,22 +706,26 @@ describe 'DNS' do
               example 'ダブルクォテーション内の文字列が255文字超過' do
                 click_on 'レコード登録'
                 sleep(1)
+                click_on 'TXT'
+                sleep(1)
                 fill_in('name', :with => record_txt_label)
-                select 'TXT', from: 'form-input-type'
                 fill_in('content', :with => content_txt_over255char_double_quotation)
                 click_on '登録する'
-                within(:css, '#dns_record_create_form > div:nth-child(16) > div > div') do
+                sleep(1)
+                within(:css, 'div.default-value > div:nth-child(2)') do
                   expect(page).to have_content '半角英数字、半角記号で入力してください。1つの文字列の最大長は255文字です。連結したあとの1つのレコードは1024文字以内で入力してください。'
                 end
               end
               example '全体の文字列が1024文字超過' do
                 click_on 'レコード登録'
                 sleep(1)
+                click_on 'TXT'
+                sleep(1)
                 fill_in('name', :with => record_txt_label)
-                select 'TXT', from: 'form-input-type'
                 fill_in('content', :with => content_txt_over1024char)
                 click_on '登録する'
-                within(:css, '#dns_record_create_form > div:nth-child(16) > div > div') do
+                sleep(1)
+                within(:css, 'div.default-value > div:nth-child(2)') do
                   expect(page).to have_content '半角英数字、半角記号で入力してください。1つの文字列の最大長は255文字です。連結したあとの1つのレコードは1024文字以内で入力してください。'
                 end
               end
@@ -743,117 +734,126 @@ describe 'DNS' do
               example 'レコード名がフォーマット外' do
                 click_on 'レコード登録'
                 sleep(1)
+                click_on 'SRV'
+                sleep(1)
                 fill_in('name', :with => 'aaa')
-                select 'SRV', from: 'form-input-type'
                 fill_in('content', :with => content_srv)
                 fill_in('prio', :with => '1')
                 click_on '登録する'
                 sleep(1)
-                within(:css, '#dns_record_create_form > div:nth-child(14) > div > div') do
+                within(:css, 'div.has-error:nth-child(2)') do
                   expect(page).to have_content '「_service._prot」のフォーマットで入力してください。「_service」「_prot」はそれぞれ2文字以上63文字以内、ドメイン名全体で253文字以内で入力してください。'
                 end
               end
               example 'weightが0-65535以外(-1)' do
                 click_on 'レコード登録'
                 sleep(1)
+                click_on 'SRV'
+                sleep(1)
                 fill_in('name', :with => record_srv_label)
-                select 'SRV', from: 'form-input-type'
                 fill_in('content', :with => '-1 5060 sip.example.com')
                 fill_in('prio', :with => '1')
                 click_on '登録する'
                 sleep(1)
-                within(:css, '#dns_record_create_form > div:nth-child(16) > div > div') do
+                within(:css, 'div.default-value > div:nth-child(2)') do
                   expect(page).to have_content 'weightとportは半角数字0-65535で入力してください。hostは半角英数字、ドット（.）、ハイフン（-）で、255文字以内で入力してください。ホスト名の末尾の.(ドット)は不要です。'
                 end
               end
               example 'weightが0-65535以外(65536)' do
                 click_on 'レコード登録'
                 sleep(1)
+                click_on 'SRV'
+                sleep(1)
                 fill_in('name', :with => record_srv_label)
-                select 'SRV', from: 'form-input-type'
                 fill_in('content', :with => '65536 5060 sip.example.com')
                 fill_in('prio', :with => '1')
                 click_on '登録する'
-                sleep(1)
-                within(:css, '#dns_record_create_form > div:nth-child(16) > div > div') do
+                sleep(2)
+                within(:css, 'div.default-value > div:nth-child(2)') do
                   expect(page).to have_content 'weightとportは半角数字0-65535で入力してください。hostは半角英数字、ドット（.）、ハイフン（-）で、255文字以内で入力してください。ホスト名の末尾の.(ドット)は不要です。'
                 end
               end
               example 'portが0-65535以外(-1)' do
                 click_on 'レコード登録'
                 sleep(1)
+                click_on 'SRV'
+                sleep(1)
                 fill_in('name', :with => record_srv_label)
-                select 'SRV', from: 'form-input-type'
                 fill_in('content', :with => '0 -1 sip.example.com')
                 fill_in('prio', :with => '1')
                 click_on '登録する'
                 sleep(1)
-                within(:css, '#dns_record_create_form > div:nth-child(16) > div > div') do
+                within(:css, 'div.default-value > div:nth-child(2)') do
                   expect(page).to have_content 'weightとportは半角数字0-65535で入力してください。hostは半角英数字、ドット（.）、ハイフン（-）で、255文字以内で入力してください。ホスト名の末尾の.(ドット)は不要です。'
                 end
               end
               example 'portが0-65535以外(65536)' do
                 click_on 'レコード登録'
                 sleep(1)
+                click_on 'SRV'
+                sleep(1)
                 fill_in('name', :with => record_srv_label)
-                select 'SRV', from: 'form-input-type'
                 fill_in('content', :with => '0 65536 sip.example.com')
                 fill_in('prio', :with => '1')
                 click_on '登録する'
                 sleep(1)
-                within(:css, '#dns_record_create_form > div:nth-child(16) > div > div') do
+                within(:css, 'div.default-value > div:nth-child(2)') do
                   expect(page).to have_content 'weightとportは半角数字0-65535で入力してください。hostは半角英数字、ドット（.）、ハイフン（-）で、255文字以内で入力してください。ホスト名の末尾の.(ドット)は不要です。'
                 end
               end
               example 'ホスト名が未入力' do
                 click_on 'レコード登録'
                 sleep(1)
+                click_on 'SRV'
+                sleep(1)
                 fill_in('name', :with => record_srv_label)
-                select 'SRV', from: 'form-input-type'
                 fill_in('content', :with => '0 65535 ')
                 fill_in('prio', :with => '1')
                 click_on '登録する'
                 sleep(1)
-                within(:css, '#dns_record_create_form > div:nth-child(16) > div > div') do
+                within(:css, 'div.default-value > div:nth-child(2)') do
                   expect(page).to have_content 'weightとportは半角数字0-65535で入力してください。hostは半角英数字、ドット（.）、ハイフン（-）で、255文字以内で入力してください。ホスト名の末尾の.(ドット)は不要です。'
                 end
               end
               example 'ホスト名がFQDN以外' do
                 click_on 'レコード登録'
                 sleep(1)
+                click_on 'SRV'
+                sleep(1)
                 fill_in('name', :with => record_srv_label)
-                select 'SRV', from: 'form-input-type'
                 fill_in('content', :with => '0 65535 aaa')
                 fill_in('prio', :with => '1')
                 click_on '登録する'
-                sleep(1)
-                within(:css, '#dns_record_create_form > div:nth-child(16) > div > div') do
+                sleep(2)
+                within(:css, 'div.default-value > div:nth-child(2)') do
                   expect(page).to have_content 'weightとportは半角数字0-65535で入力してください。hostは半角英数字、ドット（.）、ハイフン（-）で、255文字以内で入力してください。ホスト名の末尾の.(ドット)は不要です。'
                 end
               end
               example '優先度が0-65535以外(-1)' do
                 click_on 'レコード登録'
                 sleep(1)
+                click_on 'SRV'
+                sleep(1)
                 fill_in('name', :with => record_srv_label)
-                select 'SRV', from: 'form-input-type'
                 fill_in('content', :with => content_srv)
                 fill_in('prio', :with => -1)
                 click_on '登録する'
                 sleep(1)
-                within(:css, '#dns_record_create_form > div.row.prio > div > div') do
+                within(:css, '#dns_record_create_form > div.type_part.form-group.has-error') do
                   expect(page).to have_content '半角数字0～65535の間で入力してください。'
                 end
               end
               example '優先度が0-65535以外(65536)' do
                 click_on 'レコード登録'
                 sleep(1)
+                click_on 'SRV'
+                sleep(1)
                 fill_in('name', :with => record_srv_label)
-                select 'SRV', from: 'form-input-type'
                 fill_in('content', :with => content_srv)
                 fill_in('prio', :with => 65536)
                 click_on '登録する'
                 sleep(1)
-                within(:css, '#dns_record_create_form > div.row.prio > div > div') do
+                within(:css, '#dns_record_create_form > div.type_part.form-group.has-error') do
                   expect(page).to have_content '半角数字0～65535の間で入力してください。'
                 end
               end
