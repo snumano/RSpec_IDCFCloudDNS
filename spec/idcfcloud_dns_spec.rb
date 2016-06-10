@@ -159,7 +159,7 @@ describe 'DNS' do
     end   # temp 以下のDNSレコード一覧の後ろにendを挿入。全体をインデントする
     describe 'DNSレコード一覧' do
       before do
-        sleep(1)
+        sleep(2)
         click_on domain_name
       end
       example '表示' do
@@ -501,7 +501,7 @@ describe 'DNS' do
                 fill_in('ttl', :with => 599)
                 click_on '登録する'
                 sleep(2)
-                within(:css, '#dns_record_create_form > div.type_part.form-group.has-error') do
+                within(:css, '.has-error') do
                   expect(page).to have_content '半角数字600-86400で入力してください。'
                 end
               end
@@ -515,7 +515,7 @@ describe 'DNS' do
                 fill_in('ttl', :with => 86401)
                 click_on '登録する'
                 sleep(2)
-                within(:css, '#dns_record_create_form > div.type_part.form-group.has-error') do
+                within(:css, '.has-error') do
                   expect(page).to have_content '半角数字600-86400で入力してください。'
                 end
               end
@@ -600,7 +600,7 @@ describe 'DNS' do
                 click_on '登録する'
                 sleep(2)
                 within(:css, 'div.default-value > div:nth-child(2)') do
-                  expect(page).to have_content '255 文字以下で入力してください。'
+                  expect(page).to have_content '半角英数字、ドット（.）、ハイフン（-）で、255文字以内で入力してください。CNAMEは、同じレコード名に対して1つの値しか登録できません。ホスト名の末尾の.(ドット)は不要です。'
                 end
               end
             end
@@ -656,7 +656,7 @@ describe 'DNS' do
                 click_on '登録する'
                 sleep(2)
                 within(:css, 'div.default-value > div:nth-child(2)') do
-                  expect(page).to have_content '255 文字以下で入力してください。'
+                  expect(page).to have_content '半角英数字、ドット（.）、ハイフン（-）で、255文字以内で入力してください。当該レコードの値はAレコードやAAAAレコードをもつものを指定できますが、CNAMEのレコード名を指定する事はできません。ホスト名の末尾の.(ドット)は不要です。'
                 end
               end
               example '優先度が文字列' do
@@ -712,9 +712,9 @@ describe 'DNS' do
                 fill_in('content', :with => content_txt_over255char_double_quotation)
                 click_on '登録する'
                 sleep(1)
-                within(:css, 'div.default-value > div:nth-child(2)') do
+#                within(:css, 'div.default-value > div:nth-child(2)') do
                   expect(page).to have_content '半角英数字、半角記号で入力してください。1つの文字列の最大長は255文字です。連結したあとの1つのレコードは1024文字以内で入力してください。'
-                end
+#                end
               end
               example '全体の文字列が1024文字超過' do
                 click_on 'レコード登録'
@@ -725,9 +725,9 @@ describe 'DNS' do
                 fill_in('content', :with => content_txt_over1024char)
                 click_on '登録する'
                 sleep(1)
-                within(:css, 'div.default-value > div:nth-child(2)') do
+#                within(:css, 'div.default-value > div:nth-child(2)') do
                   expect(page).to have_content '半角英数字、半角記号で入力してください。1つの文字列の最大長は255文字です。連結したあとの1つのレコードは1024文字以内で入力してください。'
-                end
+#                end
               end
             end
             context 'SRVレコード' do
@@ -755,7 +755,7 @@ describe 'DNS' do
                 fill_in('prio', :with => '1')
                 click_on '登録する'
                 sleep(1)
-                within(:css, 'div.default-value > div:nth-child(2)') do
+                within(:css, '#dns_record_create_form > div.form-group.default-value.has-error') do
                   expect(page).to have_content 'weightとportは半角数字0-65535で入力してください。hostは半角英数字、ドット（.）、ハイフン（-）で、255文字以内で入力してください。ホスト名の末尾の.(ドット)は不要です。'
                 end
               end
@@ -767,9 +767,10 @@ describe 'DNS' do
                 fill_in('name', :with => record_srv_label)
                 fill_in('content', :with => '65536 5060 sip.example.com')
                 fill_in('prio', :with => '1')
+                sleep(1)
                 click_on '登録する'
                 sleep(2)
-                within(:css, 'div.default-value > div:nth-child(2)') do
+                within(:css, '#dns_record_create_form > div.form-group.default-value.has-error') do
                   expect(page).to have_content 'weightとportは半角数字0-65535で入力してください。hostは半角英数字、ドット（.）、ハイフン（-）で、255文字以内で入力してください。ホスト名の末尾の.(ドット)は不要です。'
                 end
               end
@@ -783,7 +784,7 @@ describe 'DNS' do
                 fill_in('prio', :with => '1')
                 click_on '登録する'
                 sleep(1)
-                within(:css, 'div.default-value > div:nth-child(2)') do
+                within(:css, '#dns_record_create_form > div.form-group.default-value.has-error') do
                   expect(page).to have_content 'weightとportは半角数字0-65535で入力してください。hostは半角英数字、ドット（.）、ハイフン（-）で、255文字以内で入力してください。ホスト名の末尾の.(ドット)は不要です。'
                 end
               end
@@ -797,7 +798,7 @@ describe 'DNS' do
                 fill_in('prio', :with => '1')
                 click_on '登録する'
                 sleep(1)
-                within(:css, 'div.default-value > div:nth-child(2)') do
+                within(:css, '#dns_record_create_form > div.form-group.default-value.has-error') do
                   expect(page).to have_content 'weightとportは半角数字0-65535で入力してください。hostは半角英数字、ドット（.）、ハイフン（-）で、255文字以内で入力してください。ホスト名の末尾の.(ドット)は不要です。'
                 end
               end
@@ -807,11 +808,11 @@ describe 'DNS' do
                 click_on 'SRV'
                 sleep(1)
                 fill_in('name', :with => record_srv_label)
-                fill_in('content', :with => '0 65535 ')
+                fill_in('content', :with => '0 65535')
                 fill_in('prio', :with => '1')
                 click_on '登録する'
                 sleep(1)
-                within(:css, 'div.default-value > div:nth-child(2)') do
+                within(:css, '#dns_record_create_form > div.form-group.default-value.has-error') do
                   expect(page).to have_content 'weightとportは半角数字0-65535で入力してください。hostは半角英数字、ドット（.）、ハイフン（-）で、255文字以内で入力してください。ホスト名の末尾の.(ドット)は不要です。'
                 end
               end
@@ -825,7 +826,7 @@ describe 'DNS' do
                 fill_in('prio', :with => '1')
                 click_on '登録する'
                 sleep(2)
-                within(:css, 'div.default-value > div:nth-child(2)') do
+                within(:css, '#dns_record_create_form > div.form-group.default-value.has-error') do
                   expect(page).to have_content 'weightとportは半角数字0-65535で入力してください。hostは半角英数字、ドット（.）、ハイフン（-）で、255文字以内で入力してください。ホスト名の末尾の.(ドット)は不要です。'
                 end
               end
