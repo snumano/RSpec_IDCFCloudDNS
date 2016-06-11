@@ -64,6 +64,7 @@ describe 'DNS' do
       expect(page).to have_content 'テンプレート'
       expect(page).to have_content '逆引き'
       expect(page).to have_content '操作ログ'
+      expect(page).to have_content '通知先'
       expect(page).to have_content '利用規約'
     end
   end
@@ -115,7 +116,7 @@ describe 'DNS' do
           sleep(2)
           expect(page).to have_content 'こちらの情報で登録しますか？'
           click_on 'はい'
-          sleep(1)
+          sleep(2)
           expect(page).to have_content 'ゾーンの登録を完了しました。'
         end
       end
@@ -862,16 +863,16 @@ describe 'DNS' do
           end
         end
       end
-      describe 'レコード詳細、編集' do
+      describe 'レコード編集' do
         example 'Aレコード' do
-          pending('レコード名のelementをうまく探せない') 
-#          save_and_open_page
-          find(:css,'span.tooltip-name-list').click
-          expect(page).to 'レコード編集'
-          within(:css, '#form-input-name') do
-            expect(page).to record_a_label
-          end
-          expect(page).to domain_name
+#          pending('レコード名のelementをうまく探せない') 
+          first('a', :text => convert_short(record_a_name)).click
+          sleep(1)
+          expect(find("#dns_record_edit_form > div:nth-child(1) > div > button.btn.button-to-radio.btn-primary").text).to eq 'A'
+          expect(page).to have_content 'レコード編集'
+          expect(page).to have_content domain_name
+          expect(find("#form-input-name").value).to eq record_a_label
+          expect(find("#form-input-content-a").value).to eq ip_v4_address
         end
       end
       describe 'レコード削除' do
@@ -887,7 +888,6 @@ describe 'DNS' do
 #    end   # temp
     describe 'ゾーン削除' do
       example 'ゾーン名 ***.com' do
-#        save_and_open_page
         click_on domain_name
         expect(page).to have_content convert_short(domain_name)
         # 「DNSゾーン詳細」をクリック。click_onでは動作せず。
