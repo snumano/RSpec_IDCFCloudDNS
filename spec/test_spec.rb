@@ -115,9 +115,9 @@ describe 'DNS' do
       describe 'レコード編集' do
         example 'Aレコード' do
 #          pending('レコード名のelementをうまく探せない') 
-           click_on convert_short(record_a_name)
+#           click_on convert_short(record_a_name)
 #          first('a', :text => convert_short(record_a_name)).click
-#          find('a', :text => convert_short(record_a_name)).click
+          find('a', :text => convert_short(record_a_name)).click
 #          page.all('a', :text => convert_short(record_a_name))[0].click
           sleep(1)
 #          p find("#dns_record_edit_form > div:nth-child(1) > div > button.btn.button-to-radio.btn-primary").text
