@@ -87,7 +87,7 @@ describe 'DNS' do
     describe 'DNSレコード一覧' do
       before do
         sleep(2)
-        click_on domain_name
+        click_on convert_short(domain_name)
       end
       example '表示' do
         expect(page).to have_content domain_name
@@ -115,7 +115,10 @@ describe 'DNS' do
       describe 'レコード編集' do
         example 'Aレコード' do
 #          pending('レコード名のelementをうまく探せない') 
-          first('a', :text => convert_short(record_a_name)).click
+           click_on convert_short(record_a_name)
+#          first('a', :text => convert_short(record_a_name)).click
+#          find('a', :text => convert_short(record_a_name)).click
+#          page.all('a', :text => convert_short(record_a_name))[0].click
           sleep(1)
 #          p find("#dns_record_edit_form > div:nth-child(1) > div > button.btn.button-to-radio.btn-primary").text
           expect(find("#dns_record_edit_form > div:nth-child(1) > div > button.btn.button-to-radio.btn-primary").text).to eq 'A'

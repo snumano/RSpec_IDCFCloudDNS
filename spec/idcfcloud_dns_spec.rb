@@ -17,7 +17,7 @@ record_a_label= 'a'
 record_a_name = record_a_label + '.' + domain_name
 record_cname_label= 'cname'
 record_cname_name = record_cname_label + '.' + domain_name
-record_aaaa_label= 'aaaa'
+record_aaaa_label= 'a4'
 record_aaaa_name = record_aaaa_label + '.' + domain_name
 record_mx_label= 'mx'
 record_mx_name = record_mx_label + '.' + domain_name
@@ -123,18 +123,21 @@ describe 'DNS' do
       context '失敗' do 
         example 'ゾーン名 空白' do
           click_on '作成する'
+          sleep(1)
           expect(page).to have_content '必須です。'
         end
         example 'ゾーン名 TLDなし' do
           fill_in('name', :with => domain_word)
           sleep(1)
           click_on '作成する'
+          sleep(1)
           expect(page).to have_content 'ドメイン名が不正です。'
         end
         example 'サポート外TLD(.xxx)' do
           fill_in('name', :with => domain_word + unsupported_domain)
           sleep(1)
           click_on '作成する'
+          sleep(1)
           expect(page).to have_content 'ドメイン名が不正です。'
         end
         example 'マルチバイトTLD(.東京)'do
@@ -148,12 +151,14 @@ describe 'DNS' do
           fill_in('name', :with => domain_name_over63char_label)
           sleep(1)
           click_on '作成する'
+          sleep(1)
           expect(page).to have_content 'ドメイン名が不正です。'
         end
         example 'ゾーン名255文字超過' do
           fill_in('name', :with => domain_name_over255char)
           sleep(1)
           click_on '作成する'
+          sleep(1)
           expect(page).to have_content '255文字以内で設定してください。'
         end
       end
@@ -161,7 +166,7 @@ describe 'DNS' do
     describe 'DNSレコード一覧' do
       before do
         sleep(2)
-        click_on domain_name
+        click_on convert_short(domain_name)
       end
       example '表示' do
         expect(page).to have_content domain_name
@@ -173,11 +178,12 @@ describe 'DNS' do
             click_on 'レコード登録'
             sleep(1)
             click_on 'A'
-            sleep(1)
+            sleep(2)
             fill_in('name', :with => record_a_label)
             fill_in('content', :with => ip_v4_address)
-            click_on '登録する'
             sleep(1)
+            click_on '登録する'
+            sleep(2)
             expect(page).to have_content 'レコードを登録しますか？'
             click_on 'はい'
             sleep(1)
@@ -300,7 +306,7 @@ describe 'DNS' do
             fill_in('content', :with => record_a_name)
             fill_in('prio', :with => '1')
             click_on '登録する'
-            sleep(1)
+            sleep(2)
             expect(page).to have_content 'レコードを登録しますか？'
             click_on 'はい'
           end
@@ -530,6 +536,7 @@ describe 'DNS' do
                 fill_in('name', :with => record_a_label)
                 fill_in('content', :with => 'aaa')
                 click_on '登録する'
+                sleep(1)
                 within(:css, 'div.default-value > div:nth-child(2)') do
                   expect(page).to have_content 'IPv4アドレスを入力してください。'
                 end
@@ -614,6 +621,7 @@ describe 'DNS' do
                 fill_in('name', :with => record_aaaa_label)
                 fill_in('content', :with => 'aaa')
                 click_on '登録する'
+                sleep(1)
                 within(:css, 'div.default-value > div:nth-child(2)') do
                   expect(page).to have_content 'IPv6アドレスを入力してください。'
                 end
@@ -626,6 +634,7 @@ describe 'DNS' do
                 fill_in('name', :with => record_aaaa_label)
                 fill_in('content', :with => ip_v4_address)
                 click_on '登録する'
+                sleep(1)
                 within(:css, 'div.default-value > div:nth-child(2)') do
                   expect(page).to have_content 'IPv6アドレスを入力してください。'
                 end
@@ -866,7 +875,9 @@ describe 'DNS' do
       describe 'レコード編集' do
         example 'Aレコード' do
 #          pending('レコード名のelementをうまく探せない') 
-          first('a', :text => convert_short(record_a_name)).click
+          sleep(1)
+#          first('a', :text => convert_short(record_a_name)).click
+          find('a', :text => convert_short(record_a_name)).click
           sleep(1)
           expect(find("#dns_record_edit_form > div:nth-child(1) > div > button.btn.button-to-radio.btn-primary").text).to eq 'A'
           expect(page).to have_content 'レコード編集'
