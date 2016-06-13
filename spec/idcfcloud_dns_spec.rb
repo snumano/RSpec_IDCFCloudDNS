@@ -93,7 +93,7 @@ describe 'DNS' do
           sleep(1)
           expect(page).to have_content 'こちらの情報で登録しますか？'
           click_on 'はい'
-          sleep(2)
+          sleep(3)
           expect(page).to have_content 'ゾーンの登録を完了しました。'
         end
         example 'ゾーン名 ***.com digコマンド確認'
