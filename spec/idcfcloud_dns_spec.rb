@@ -116,7 +116,7 @@ describe 'DNS' do
           sleep(2)
           expect(page).to have_content 'こちらの情報で登録しますか？'
           click_on 'はい'
-          sleep(2)
+          sleep(3)
           expect(page).to have_content 'ゾーンの登録を完了しました。'
         end
       end
@@ -842,7 +842,7 @@ describe 'DNS' do
               end
               example '優先度が0-65535以外(-1)' do
                 click_on 'レコード登録'
-                sleep(1)
+                sleep(2)
                 click_on 'SRV'
                 sleep(1)
                 fill_in('name', :with => record_srv_label)
@@ -856,7 +856,7 @@ describe 'DNS' do
               end
               example '優先度が0-65535以外(65536)' do
                 click_on 'レコード登録'
-                sleep(1)
+                sleep(2)
                 click_on 'SRV'
                 sleep(1)
                 fill_in('name', :with => record_srv_label)
@@ -878,7 +878,7 @@ describe 'DNS' do
           sleep(1)
 #          first('a', :text => convert_short(record_a_name)).click
           find('a', :text => convert_short(record_a_name)).click
-          sleep(1)
+          sleep(2)
           expect(find("#dns_record_edit_form > div:nth-child(1) > div > button.btn.button-to-radio.btn-primary").text).to eq 'A'
           expect(page).to have_content 'レコード編集'
           expect(page).to have_content domain_name
@@ -899,15 +899,15 @@ describe 'DNS' do
 #    end   # temp
     describe 'ゾーン削除' do
       example 'ゾーン名 ***.com' do
-        click_on domain_name
+        click_on convert_short(domain_name)
         expect(page).to have_content convert_short(domain_name)
         # 「DNSゾーン詳細」をクリック。click_onでは動作せず。
         find(:xpath,'//*[@id="zone-detail"]/div/ol/li[1]/a').click
         click_on 'ゾーン削除'
-        sleep(1)
+        sleep(2)
         expect(page).to have_content 'このゾーンを削除しますか？'
         click_on 'はい'
-        sleep(2)
+        sleep(3)
         expect(page).to have_content 'ゾーンの削除が完了しました。'
         click_on 'OK'
         expect(page).not_to have_content convert_short(domain_name)
@@ -956,6 +956,7 @@ describe 'DNS' do
     before do
       visit '/dns/'
       click_on '逆引き'
+      sleep(2)
     end
 
     it_should_behave_like 'check the sidebar'
