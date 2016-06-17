@@ -130,7 +130,7 @@ describe 'DNS' do
           fill_in('name', :with => domain_word)
           sleep(1)
           click_on '作成する'
-          sleep(1)
+          sleep(2)
           expect(page).to have_content 'ドメイン名が不正です。'
         end
         example 'サポート外TLD(.xxx)' do
